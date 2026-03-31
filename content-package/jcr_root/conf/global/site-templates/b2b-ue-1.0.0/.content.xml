@@ -3,6 +3,7 @@
     jcr:description="B2B UE starter for AEM EDS + Universal Editor. 8 languages (EN/JA/ZH/KO/ES/DE/FR/AR), dynamic navigation, list block."
     jcr:primaryType="sling:Folder"
     jcr:title="B2B UE Starter"
+    createdBy="Adobe"
     name="b2b-ue"
     version="1.0.0"
     useCases="[AEM Sites delivered with Edge Delivery Services,Edge Delivery Services]"/>
