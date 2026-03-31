@@ -1,0 +1,29 @@
+{
+  "mappings": [
+    "/content/b2b-ue/us/en/:/",
+    "/content/b2b-ue/us/en:/en",
+    "/content/b2b-ue/us/en/:/en/",
+    "/content/b2b-ue/us/ja/:/ja/",
+    "/content/b2b-ue/us/ja:/ja",
+    "/content/b2b-ue/us/zh/:/zh/",
+    "/content/b2b-ue/us/zh:/zh",
+    "/content/b2b-ue/us/ko/:/ko/",
+    "/content/b2b-ue/us/ko:/ko",
+    "/content/b2b-ue/us/es/:/es/",
+    "/content/b2b-ue/us/es:/es",
+    "/content/b2b-ue/us/de/:/de/",
+    "/content/b2b-ue/us/de:/de",
+    "/content/b2b-ue/us/fr/:/fr/",
+    "/content/b2b-ue/us/fr:/fr",
+    "/content/b2b-ue/us/ar/:/ar/",
+    "/content/b2b-ue/us/ar:/ar",
+    "/content/b2b-ue/configuration:/.helix/config.json",
+    "/content/b2b-ue/metadata:/metadata.json",
+    "/content/b2b-ue/redirects:/redirects.json",
+    "/content/b2b-ue/placeholders:/placeholders.json"
+  ],
+  "includes": [
+    "/content/b2b-ue/",
+    "/content/dam/b2b-ue/"
+  ]
+}

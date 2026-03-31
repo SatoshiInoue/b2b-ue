@@ -1,0 +1,53 @@
+[
+  {
+    "id": "page-metadata",
+    "fields": [
+      {
+        "component": "tab",
+        "label": "Basic",
+        "name": "tab-basic"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "jcr:title",
+        "label": "Title",
+        "required": true
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "jcr:pagetitle",
+        "label": "Page Title"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "jcr:description",
+        "label": "Description"
+      },
+      {
+        "component": "tab",
+        "label": "Navigation",
+        "name": "tab-nav"
+      },
+      {
+        "component": "number",
+        "valueType": "number",
+        "name": "navOrder",
+        "label": "Nav Order"
+      },
+      {
+        "component": "boolean",
+        "name": "hideInNav",
+        "label": "Hide in Nav"
+      },
+      {
+        "component": "number",
+        "valueType": "number",
+        "name": "listOrder",
+        "label": "List Order"
+      }
+    ]
+  }
+]

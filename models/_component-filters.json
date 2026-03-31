@@ -1,0 +1,37 @@
+[
+  {
+    "id": "main",
+    "components": [
+      "section"
+    ]
+  },
+  {
+    "id": "section",
+    "components": [
+      "columns",
+      "fragment",
+      "hero",
+      "image",
+      "list",
+      "separator",
+      "solutions-grid",
+      "spec-table",
+      "text",
+      "title"
+    ]
+  },
+  {
+    "id": "columns",
+    "components": [
+      "column"
+    ]
+  },
+  {
+    "id": "column",
+    "components": [
+      "image",
+      "text",
+      "title"
+    ]
+  }
+]
