@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workspaceFilter version="1.0">
-  <filter root="/content/b2b-ue"/>
-  <filter root="/content/dam/b2b-ue"/>
-  <filter root="/conf/b2b-ue"/>
+  <filter root="/conf/global/site-templates/b2b-ue-1.0.0"/>
 </workspaceFilter>
