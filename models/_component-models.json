@@ -240,6 +240,95 @@
     ]
   },
   {
+    "id": "hero-b2b",
+    "fields": [
+      {
+        "component": "reference",
+        "name": "image",
+        "label": "Background Image",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "name": "preheader",
+        "label": "Preheader",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "header",
+        "label": "Headline",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Description",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "cta1Text",
+        "label": "CTA 1 Text",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "cta1Link",
+        "label": "CTA 1 Link",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "cta2Text",
+        "label": "CTA 2 Text",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "cta2Link",
+        "label": "CTA 2 Link",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "stat1Value",
+        "label": "Stat 1 Value",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "stat1Label",
+        "label": "Stat 1 Label",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "stat2Value",
+        "label": "Stat 2 Value",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "stat2Label",
+        "label": "Stat 2 Label",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "stat3Value",
+        "label": "Stat 3 Value",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "stat3Label",
+        "label": "Stat 3 Label",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
     "id": "list",
     "fields": [
       {
