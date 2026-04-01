@@ -1,0 +1,315 @@
+/* --------------------------------
+   Hero B2B — container reset
+--------------------------------- */
+.hero-b2b-container .hero-b2b-wrapper {
+  max-width: unset;
+  padding: 0;
+}
+
+/* --------------------------------
+   Hero B2B — base
+--------------------------------- */
+.hero-b2b {
+  position: relative;
+  height: 620px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* --------------------------------
+   Background image
+--------------------------------- */
+.hero-b2b .hero-b2b-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.hero-b2b .hero-b2b-bg picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-b2b .hero-b2b-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* --------------------------------
+   Dark gradient overlay
+--------------------------------- */
+.hero-b2b .hero-b2b-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 24, 69, 0.88) 0%,
+    rgba(0, 24, 69, 0.72) 45%,
+    rgba(0, 24, 69, 0.18) 100%
+  );
+}
+
+/* --------------------------------
+   Gold left accent bar
+--------------------------------- */
+.hero-b2b .hero-b2b-accent {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: #e8b400;
+  z-index: 2;
+}
+
+/* --------------------------------
+   Content area
+--------------------------------- */
+.hero-b2b .hero-b2b-content {
+  position: relative;
+  z-index: 2;
+  max-width: 720px;
+  padding: 0 96px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* --------------------------------
+   Preheader (eyebrow)
+--------------------------------- */
+.hero-b2b .hero-b2b-preheader {
+  color: #e8b400;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin: 0 0 16px;
+}
+
+/* --------------------------------
+   Headline
+--------------------------------- */
+.hero-b2b .hero-b2b-headline {
+  color: #fff;
+  font-family: 'Inter Tight', 'Inter', system-ui, sans-serif;
+  font-size: 58px;
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  margin: 0 0 20px;
+}
+
+/* --------------------------------
+   Description
+--------------------------------- */
+.hero-b2b .hero-b2b-description {
+  color: rgba(255, 255, 255, 0.82);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.6;
+  margin: 0 0 32px;
+  max-width: 560px;
+}
+
+.hero-b2b .hero-b2b-description p {
+  margin: 0;
+  color: inherit;
+}
+
+/* --------------------------------
+   CTAs
+--------------------------------- */
+.hero-b2b .hero-b2b-ctas {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.hero-b2b .hero-b2b-cta-primary {
+  display: inline-block;
+  background: #e8b400;
+  color: #001840;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 14px 32px;
+  text-decoration: none;
+  border: 2px solid #e8b400;
+  transition: background 0.2s, color 0.2s;
+}
+
+.hero-b2b .hero-b2b-cta-primary:hover {
+  background: #d4a200;
+  border-color: #d4a200;
+}
+
+.hero-b2b .hero-b2b-cta-secondary {
+  display: inline-block;
+  background: transparent;
+  color: #fff;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 14px 24px;
+  text-decoration: none;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.hero-b2b .hero-b2b-cta-secondary:hover {
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* --------------------------------
+   Trust stat bar
+--------------------------------- */
+.hero-b2b .hero-b2b-stats {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.hero-b2b .hero-b2b-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0 24px 0 0;
+}
+
+.hero-b2b .hero-b2b-stat:first-child {
+  padding-left: 0;
+}
+
+.hero-b2b .hero-b2b-stat-value {
+  color: #e8b400;
+  font-family: 'Inter Tight', 'Inter', system-ui, sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.hero-b2b .hero-b2b-stat-label {
+  color: rgba(255, 255, 255, 0.6);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.hero-b2b .hero-b2b-stat-divider {
+  width: 1px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.25);
+  margin: 0 24px 0 0;
+  flex-shrink: 0;
+}
+
+/* --------------------------------
+   Responsive — tablet
+--------------------------------- */
+@media (width < 1024px) {
+  .hero-b2b .hero-b2b-content {
+    padding: 0 48px;
+  }
+
+  .hero-b2b .hero-b2b-headline {
+    font-size: 44px;
+  }
+}
+
+/* --------------------------------
+   Responsive — mobile
+--------------------------------- */
+@media (width < 600px) {
+  .hero-b2b {
+    height: auto;
+    min-height: 560px;
+    align-items: flex-end;
+  }
+
+  .hero-b2b .hero-b2b-overlay {
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 18, 52, 0) 0%,
+      rgba(0, 18, 52, 0.35) 28%,
+      rgba(0, 18, 52, 0.68) 55%,
+      rgba(0, 18, 52, 0.80) 100%
+    );
+  }
+
+  .hero-b2b .hero-b2b-content {
+    padding: 24px 20px 32px;
+    max-width: 100%;
+    width: 100%;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+  }
+
+  .hero-b2b .hero-b2b-accent {
+    display: none;
+  }
+
+  .hero-b2b .hero-b2b-preheader {
+    font-size: 11px;
+    margin-bottom: 12px;
+  }
+
+  .hero-b2b .hero-b2b-headline {
+    font-size: 32px;
+    margin-bottom: 14px;
+  }
+
+  .hero-b2b .hero-b2b-description {
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+
+  .hero-b2b .hero-b2b-ctas {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .hero-b2b .hero-b2b-cta-primary,
+  .hero-b2b .hero-b2b-cta-secondary {
+    text-align: center;
+    padding: 13px 20px;
+    font-size: 14px;
+  }
+
+  .hero-b2b .hero-b2b-stats {
+    gap: 0;
+    flex-wrap: nowrap;
+  }
+
+  .hero-b2b .hero-b2b-stat {
+    padding: 0 12px 0 0;
+  }
+
+  .hero-b2b .hero-b2b-stat-value {
+    font-size: 16px;
+  }
+
+  .hero-b2b .hero-b2b-stat-label {
+    font-size: 9px;
+  }
+
+  .hero-b2b .hero-b2b-stat-divider {
+    margin: 0 12px 0 0;
+  }
+}
