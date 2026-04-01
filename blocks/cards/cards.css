@@ -456,5 +456,140 @@
   .cards-container .cards-wrapper {
     padding: 0 4%;
   }
-  
+
+}
+
+
+/* ----------------------------------------
+   Solution Tile — dark overlay card style
+----------------------------------------- */
+.cards > ul:has(> li.solution-tile) {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  flex: unset;
+  padding: 0 24px;
+}
+
+.cards > ul > li.solution-tile {
+  position: relative;
+  border-radius: 6px;
+  overflow: hidden;
+  height: 220px;
+  flex-direction: column;
+  background: #1a2540;
+}
+
+/* Full-bleed background image */
+.cards > ul > li.solution-tile .cards-card-image {
+  position: absolute;
+  inset: 0;
+  flex-grow: unset;
+}
+
+.cards > ul > li.solution-tile .cards-card-image picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.cards > ul > li.solution-tile .cards-card-image img {
+  width: 100%;
+  height: 100%;
+  max-height: unset;
+  min-height: unset;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Dark gradient overlay */
+.cards > ul > li.solution-tile .cards-card-image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 16, 48, 0.94) 0%,
+    rgba(0, 16, 48, 0.65) 50%,
+    rgba(0, 16, 48, 0.28) 100%
+  );
+}
+
+/* Content at bottom */
+.cards > ul > li.solution-tile .cards-card-body {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 0 20px 18px;
+  background: transparent;
+  margin: 0;
+}
+
+/* Gold accent bar above title */
+.cards > ul > li.solution-tile .cards-card-body::before {
+  content: '';
+  display: block;
+  width: 28px;
+  height: 3px;
+  background: #e8b400;
+  margin-bottom: 10px;
+}
+
+.cards > ul > li.solution-tile .cards-card-body h1,
+.cards > ul > li.solution-tile .cards-card-body h2,
+.cards > ul > li.solution-tile .cards-card-body h3 {
+  margin: 0 0 6px;
+  color: #fff;
+  font-family: 'Inter Tight', 'Inter', system-ui, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.cards > ul > li.solution-tile .cards-card-body p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* Icon — top-right */
+.cards > ul > li.solution-tile .cards-card-icon {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 6px;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.cards > ul > li.solution-tile .cards-card-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Responsive solution grid */
+@media (width < 900px) {
+  .cards > ul:has(> li.solution-tile) {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 0 16px;
+  }
+}
+
+@media (width < 600px) {
+  .cards > ul:has(> li.solution-tile) {
+    grid-template-columns: 1fr;
+    padding: 0 16px;
+  }
+
+  .cards > ul > li.solution-tile {
+    height: 180px;
+  }
 }

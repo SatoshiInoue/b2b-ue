@@ -1,0 +1,76 @@
+.section-header-container .section-header-wrapper {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 64px 24px 48px;
+  text-align: center;
+}
+
+.section-header-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Eyebrow with decorative lines */
+.section-header-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  color: #e8b400;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.section-header-line {
+  display: block;
+  width: 32px;
+  height: 1px;
+  background: #e8b400;
+  flex-shrink: 0;
+}
+
+/* Heading */
+.section-header-heading {
+  margin: 0;
+  color: #003087;
+  font-family: 'Inter Tight', 'Inter', system-ui, sans-serif;
+  font-size: 38px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+/* Subtitle */
+.section-header-subtitle {
+  max-width: 560px;
+  color: #4a5568;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.section-header-subtitle p {
+  margin: 0;
+  color: inherit;
+}
+
+/* Responsive */
+@media (width < 600px) {
+  .section-header-container .section-header-wrapper {
+    padding: 48px 20px 32px;
+  }
+
+  .section-header-heading {
+    font-size: 28px;
+  }
+
+  .section-header-subtitle {
+    font-size: 15px;
+  }
+}

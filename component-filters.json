@@ -9,9 +9,11 @@
     "id": "section",
     "components": [
       "columns",
+      "cta-link",
       "fragment",
       "hero",
       "hero-b2b",
+      "section-header",
       "image",
       "list",
       "separator",
