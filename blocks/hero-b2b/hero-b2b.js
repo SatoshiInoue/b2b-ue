@@ -4,55 +4,136 @@ import { moveInstrumentation } from '../../scripts/scripts.js';
 export default function decorate(block) {
   const rows = [...block.querySelectorAll(':scope > div')];
 
-  const getCell = (rowIndex) => rows[rowIndex]?.querySelector(':scope > div:last-child');
-  const getText = (rowIndex) => getCell(rowIndex)?.textContent?.trim() || '';
-  const getLink = (rowIndex) => getCell(rowIndex)?.querySelector('a') || null;
+  // Returns the value cell (second div) of a row — carries data-aue-prop
+  // attributes injected by AEM for UE inline editing.
+  const getCell = (i) => rows[i]?.querySelector(':scope > div:last-child');
 
-  // Field order matches _hero-b2b.json model
-  const bgPicture = getCell(0)?.querySelector('picture');
-  const bgImg = bgPicture?.querySelector('img');
-  const preheader = getText(1);
-  const headline = getText(2);
-  const description = getCell(3)?.innerHTML || '';
-  const cta1Text = getText(4);
-  const cta1Link = getText(5) || '#';
-  const cta2Text = getText(6);
-  const cta2Link = getText(7) || '#';
-  const stat1Value = getText(8);
-  const stat1Label = getText(9);
-  const stat2Value = getText(10);
-  const stat2Label = getText(11);
-  const stat3Value = getText(12);
-  const stat3Label = getText(13);
+  // Field order matches _hero-b2b.json / models/_component-models.json
+  const imageCell = getCell(0);
+  const preheaderCell = getCell(1);
+  const headlineCell = getCell(2);
+  const descriptionCell = getCell(3);
+  const cta1TextCell = getCell(4);
+  const cta1LinkCell = getCell(5);
+  const cta2TextCell = getCell(6);
+  const cta2LinkCell = getCell(7);
+  const stat1ValueCell = getCell(8);
+  const stat1LabelCell = getCell(9);
+  const stat2ValueCell = getCell(10);
+  const stat2LabelCell = getCell(11);
+  const stat3ValueCell = getCell(12);
+  const stat3LabelCell = getCell(13);
 
-  // Build optimized background picture
-  let bgEl = '';
+  // ── Background image ──────────────────────────────────────────────────────
+  const bgImg = imageCell?.querySelector('img');
+  const bgDiv = document.createElement('div');
+  bgDiv.className = 'hero-b2b-bg';
   if (bgImg) {
     const optimized = createOptimizedPicture(bgImg.src, bgImg.alt || '', false, [
       { media: '(min-width: 900px)', width: '1440' },
       { width: '800' },
     ]);
     moveInstrumentation(bgImg, optimized.querySelector('img'));
-    bgEl = optimized.outerHTML;
+    bgDiv.append(optimized);
   }
 
-  block.innerHTML = `
-    <div class="hero-b2b-bg">${bgEl}</div>
-    <div class="hero-b2b-overlay"></div>
-    <div class="hero-b2b-accent"></div>
-    <div class="hero-b2b-content">
-      ${preheader ? `<p class="hero-b2b-preheader">${preheader}</p>` : ''}
-      <h1 class="hero-b2b-headline">${headline}</h1>
-      <div class="hero-b2b-description">${description}</div>
-      <div class="hero-b2b-ctas">
-        ${cta1Text ? `<a class="hero-b2b-cta-primary" href="${cta1Link}">${cta1Text}</a>` : ''}
-        ${cta2Text ? `<a class="hero-b2b-cta-secondary" href="${cta2Link}">${cta2Text} →</a>` : ''}
-      </div>
-      <div class="hero-b2b-stats">
-        ${stat1Value ? `<div class="hero-b2b-stat"><span class="hero-b2b-stat-value">${stat1Value}</span><span class="hero-b2b-stat-label">${stat1Label}</span></div><div class="hero-b2b-stat-divider"></div>` : ''}
-        ${stat2Value ? `<div class="hero-b2b-stat"><span class="hero-b2b-stat-value">${stat2Value}</span><span class="hero-b2b-stat-label">${stat2Label}</span></div><div class="hero-b2b-stat-divider"></div>` : ''}
-        ${stat3Value ? `<div class="hero-b2b-stat"><span class="hero-b2b-stat-value">${stat3Value}</span><span class="hero-b2b-stat-label">${stat3Label}</span></div>` : ''}
-      </div>
-    </div>
-  `;
+  // ── Overlay + accent ──────────────────────────────────────────────────────
+  const overlayDiv = document.createElement('div');
+  overlayDiv.className = 'hero-b2b-overlay';
+  const accentDiv = document.createElement('div');
+  accentDiv.className = 'hero-b2b-accent';
+
+  // ── Content ───────────────────────────────────────────────────────────────
+  const contentDiv = document.createElement('div');
+  contentDiv.className = 'hero-b2b-content';
+
+  // Helper: create a plain text element and move UE instrumentation from
+  // the original value cell so the element is inline-editable in UE.
+  function makeText(tag, cls, cell) {
+    const el = document.createElement(tag);
+    el.className = cls;
+    el.textContent = cell?.textContent?.trim() || '';
+    if (cell) moveInstrumentation(cell, el);
+    return el;
+  }
+
+  // Preheader
+  const preheaderText = preheaderCell?.textContent?.trim() || '';
+  if (preheaderText) {
+    contentDiv.append(makeText('p', 'hero-b2b-preheader', preheaderCell));
+  }
+
+  // Headline
+  contentDiv.append(makeText('h1', 'hero-b2b-headline', headlineCell));
+
+  // Description (richtext — keep inner HTML, moveInstrumentation on the cell)
+  const descDiv = document.createElement('div');
+  descDiv.className = 'hero-b2b-description';
+  descDiv.innerHTML = descriptionCell?.innerHTML || '';
+  if (descriptionCell) moveInstrumentation(descriptionCell, descDiv);
+  contentDiv.append(descDiv);
+
+  // CTAs
+  const ctasDiv = document.createElement('div');
+  ctasDiv.className = 'hero-b2b-ctas';
+
+  const cta1Text = cta1TextCell?.textContent?.trim() || '';
+  if (cta1Text) {
+    const a1 = document.createElement('a');
+    a1.className = 'hero-b2b-cta-primary';
+    a1.href = cta1LinkCell?.textContent?.trim() || '#';
+    a1.textContent = cta1Text;
+    moveInstrumentation(cta1TextCell, a1);
+    ctasDiv.append(a1);
+  }
+
+  const cta2Text = cta2TextCell?.textContent?.trim() || '';
+  if (cta2Text) {
+    const a2 = document.createElement('a');
+    a2.className = 'hero-b2b-cta-secondary';
+    a2.href = cta2LinkCell?.textContent?.trim() || '#';
+    a2.textContent = `${cta2Text} →`;
+    moveInstrumentation(cta2TextCell, a2);
+    ctasDiv.append(a2);
+  }
+
+  contentDiv.append(ctasDiv);
+
+  // Stats
+  const statsDiv = document.createElement('div');
+  statsDiv.className = 'hero-b2b-stats';
+
+  [[stat1ValueCell, stat1LabelCell], [stat2ValueCell, stat2LabelCell], [stat3ValueCell, stat3LabelCell]]
+    .forEach(([valCell, lblCell], i) => {
+      const val = valCell?.textContent?.trim() || '';
+      if (!val) return;
+
+      const statDiv = document.createElement('div');
+      statDiv.className = 'hero-b2b-stat';
+
+      const valSpan = document.createElement('span');
+      valSpan.className = 'hero-b2b-stat-value';
+      valSpan.textContent = val;
+      moveInstrumentation(valCell, valSpan);
+
+      const lblSpan = document.createElement('span');
+      lblSpan.className = 'hero-b2b-stat-label';
+      lblSpan.textContent = lblCell?.textContent?.trim() || '';
+      moveInstrumentation(lblCell, lblSpan);
+
+      statDiv.append(valSpan, lblSpan);
+      statsDiv.append(statDiv);
+
+      if (i < 2) {
+        const divider = document.createElement('div');
+        divider.className = 'hero-b2b-stat-divider';
+        statsDiv.append(divider);
+      }
+    });
+
+  contentDiv.append(statsDiv);
+
+  // ── Replace block contents ────────────────────────────────────────────────
+  block.innerHTML = '';
+  block.append(bgDiv, overlayDiv, accentDiv, contentDiv);
 }
