@@ -58,7 +58,8 @@
           "value": "",
           "options": [
             { "name": "Default (centered)", "value": "" },
-            { "name": "Dark Left", "value": "dark-left" }
+            { "name": "Dark Left", "value": "dark-left" },
+            { "name": "News Inline (heading + CTA row)", "value": "news-inline" }
           ]
         }
       ]

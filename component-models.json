@@ -359,6 +359,10 @@
           {
             "name": "Dark Left",
             "value": "dark-left"
+          },
+          {
+            "name": "News Inline (heading + CTA row)",
+            "value": "news-inline"
           }
         ]
       }
@@ -633,6 +637,10 @@
           {
             "name": "Medium",
             "value": "medium"
+          },
+          {
+            "name": "News Featured",
+            "value": "news-featured"
           }
         ],
         "value": "card"

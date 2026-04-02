@@ -15,24 +15,24 @@ export default function decorate(block) {
   const style = getCell(5)?.textContent?.trim() || '';
   if (style) block.classList.add(style);
 
-  const isDark = style.includes('dark');
-
   const inner = document.createElement('div');
   inner.className = 'section-header-inner';
 
-  // Eyebrow — text property, use ueText
+  // Eyebrow — decorative lines only for default (centered) style
   const eyebrowText = getCell(0)?.textContent?.trim();
   if (eyebrowText) {
     const p = ueText(document.createElement('p'), 'eyebrow', 'Eyebrow');
     p.className = 'section-header-eyebrow';
-    if (isDark) {
-      p.textContent = eyebrowText;
-    } else {
+    if (!style) {
+      // default: symmetric gold lines on both sides
       const lineL = document.createElement('span');
       lineL.className = 'section-header-line';
       const lineR = document.createElement('span');
       lineR.className = 'section-header-line';
       p.append(lineL, eyebrowText, lineR);
+    } else {
+      // named variants: plain text — CSS handles any decoration
+      p.textContent = eyebrowText;
     }
     inner.append(p);
   }

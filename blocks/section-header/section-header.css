@@ -61,6 +61,104 @@
 }
 
 /* ----------------------------------------
+   News-inline variant — heading left, CTA right, gold bar eyebrow
+----------------------------------------- */
+.section-header-container:has(.section-header.news-inline) .section-header-wrapper {
+  max-width: unset;
+  margin: 0;
+  text-align: left;
+  padding: 64px 64px 40px;
+}
+
+.section-header.news-inline .section-header-inner {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.section-header.news-inline .section-header-eyebrow {
+  flex-basis: 100%;
+  color: #e8b400;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+/* Gold bar before eyebrow text — CSS-only, no JS DOM node */
+.section-header.news-inline .section-header-eyebrow::before {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: #e8b400;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+.section-header.news-inline .section-header-heading {
+  flex: 1;
+  color: #003087;
+  font-size: 34px;
+  text-align: left;
+  margin: 0;
+}
+
+.section-header.news-inline .section-header-subtitle {
+  flex-basis: 100%;
+  color: #4a5568;
+  max-width: 100%;
+  margin-top: 8px;
+}
+
+/* CTA link aligned right, baseline of heading */
+.section-header.news-inline .section-header-cta {
+  flex-shrink: 0;
+  color: #003087;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  padding-bottom: 2px;
+  border-bottom: 2px solid #e8b400;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.section-header.news-inline .section-header-cta::after {
+  content: none;
+}
+
+.section-header.news-inline .section-header-cta:hover {
+  color: #0066cc;
+  border-bottom-color: #0066cc;
+  text-decoration: none;
+}
+
+@media (width < 900px) {
+  .section-header-container:has(.section-header.news-inline) .section-header-wrapper {
+    padding: 48px 32px 32px;
+  }
+}
+
+@media (width < 600px) {
+  .section-header-container:has(.section-header.news-inline) .section-header-wrapper {
+    padding: 40px 20px 28px;
+  }
+
+  .section-header.news-inline .section-header-heading {
+    font-size: 24px;
+    flex-basis: 100%;
+  }
+
+  .section-header.news-inline .section-header-cta {
+    font-size: 11px;
+  }
+}
+
+/* ----------------------------------------
    Dark-left variant
 ----------------------------------------- */
 

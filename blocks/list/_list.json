@@ -110,7 +110,8 @@
           "options": [
             { "name": "Card", "value": "card" },
             { "name": "Small", "value": "small" },
-            { "name": "Medium", "value": "medium" }
+            { "name": "Medium", "value": "medium" },
+            { "name": "News Featured", "value": "news-featured" }
           ],
           "value": "card"
         }

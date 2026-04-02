@@ -90,6 +90,7 @@ async function fetchAuthorListPages(rootPath, langCode) {
         title,
         description: content['jcr:description'] || '',
         image: '',
+        category: content.category || '',
         lastModified: lastModifiedRaw ? new Date(lastModifiedRaw).getTime() / 1000 : 0,
         listOrder: parseInt(content.listOrder, 10) || null,
       });
@@ -144,6 +145,7 @@ async function fetchPublishedListPages(rootPath, langCode) {
         title: p.navTitle || p.title || '',
         description: p.description || '',
         image: p.image || '',
+        category: p.category || '',
         lastModified: p.lastModified || 0,
         listOrder: p.listOrder ? parseInt(p.listOrder, 10) : null,
       }));
@@ -163,6 +165,7 @@ async function fetchPublishedListPages(rootPath, langCode) {
       title: p.navTitle || p.title || '',
       description: p.description || '',
       image: p.image || '',
+      category: p.category || '',
       lastModified: p.lastModified || 0,
       listOrder: p.listOrder ? parseInt(p.listOrder, 10) : null,
     }));
@@ -282,6 +285,92 @@ function renderList(pages, config) {
       dateEl.append(time);
       body.append(dateEl);
     }
+
+    a.append(body);
+    li.append(a);
+    ul.append(li);
+  });
+
+  return ul;
+}
+
+/**
+ * Renders the "news-featured" layout: first card is featured (larger),
+ * the rest are secondary. Always shows image, category badge, date, title,
+ * description, and "Read more" link. Mobile: secondary cards go horizontal.
+ * @param {Array} pages
+ * @returns {Element}
+ */
+function renderNewsFeatured(pages) {
+  const ul = document.createElement('ul');
+  ul.className = 'list-news-grid';
+
+  pages.forEach((page, idx) => {
+    const li = document.createElement('li');
+    li.className = idx === 0 ? 'list-news-item list-news-featured' : 'list-news-item';
+
+    const a = document.createElement('a');
+    a.href = page.path;
+
+    // Image area
+    const imgDiv = document.createElement('div');
+    imgDiv.className = 'list-news-image';
+
+    if (page.image) {
+      const widths = idx === 0
+        ? [{ media: '(min-width: 900px)', width: '700' }, { width: '500' }]
+        : [{ media: '(min-width: 900px)', width: '450' }, { width: '360' }];
+      const pic = createOptimizedPicture(page.image, page.title || '', false, widths);
+      const img = pic.querySelector('img');
+      if (img) {
+        img.addEventListener('error', () => { pic.replaceWith(createImagePlaceholder()); }, { once: true });
+      }
+      imgDiv.append(pic);
+    } else {
+      imgDiv.append(createImagePlaceholder());
+    }
+
+    // Category badge — inside image area (top-left)
+    if (page.category) {
+      const badge = document.createElement('span');
+      badge.className = 'list-news-badge';
+      badge.dataset.category = page.category.toLowerCase().replace(/[\s/]+/g, '-');
+      badge.textContent = page.category.toUpperCase();
+      imgDiv.append(badge);
+    }
+
+    a.append(imgDiv);
+
+    // Text body
+    const body = document.createElement('div');
+    body.className = 'list-news-body';
+
+    if (page.lastModified) {
+      const dateEl = document.createElement('p');
+      dateEl.className = 'list-news-date';
+      const time = document.createElement('time');
+      [time.dateTime] = new Date(page.lastModified * 1000).toISOString().split('T');
+      time.textContent = formatDate(page.lastModified);
+      dateEl.append(time);
+      body.append(dateEl);
+    }
+
+    const heading = document.createElement('h3');
+    heading.className = 'list-news-title';
+    heading.textContent = page.title || '';
+    body.append(heading);
+
+    if (page.description) {
+      const desc = document.createElement('p');
+      desc.className = 'list-news-description';
+      desc.textContent = page.description;
+      body.append(desc);
+    }
+
+    const readMore = document.createElement('p');
+    readMore.className = 'list-news-readmore';
+    readMore.textContent = 'Read more →';
+    body.append(readMore);
 
     a.append(body);
     li.append(a);
@@ -417,7 +506,9 @@ export default async function decorate(block) {
   const sorted = sortPages(pages, sortBy);
   const limited = limit > 0 ? sorted.slice(0, limit) : sorted;
 
-  if (paginate && limited.length > pageSize) {
+  if (listStyle === 'news-featured') {
+    block.append(renderNewsFeatured(limited));
+  } else if (paginate && limited.length > pageSize) {
     renderPaginatedList(limited, config, block);
   } else {
     block.append(renderList(limited, config));
