@@ -10,19 +10,27 @@ Build script — generates two AEM content packages from content-package/
   b2b-ue-site-{VERSION}.zip
       Full-install package. Installs both the template AND all site content
       directly (/content/b2b-ue, /content/dam/b2b-ue, /conf/b2b-ue).
-      Uses mode="replace" on all filters — safe to reinstall / overwrite.
+      Uses merge mode for conf/content — safe to reinstall without wiping
+      AEM-managed configuration. DAM and template use replace mode.
+
+      CF model nodes (/conf/b2b-ue/settings/dam/cfm/models/) are excluded
+      because they require dam:AssetModel which may not be available on all
+      AEM Cloud instances. Add CF models manually via AEM Author if needed.
 
 Usage:
     python3 build-packages.py           # builds both, version from VERSION below
     python3 build-packages.py --version 1.2.0
+    python3 build-packages.py --template-only
+    python3 build-packages.py --site-only
 
 Source of truth:
     content-package/                    # package source (edit this)
       jcr_root/conf/global/site-templates/b2b-ue-1.0.0/
-        site.zip                        # inner package — rebuild with Python
-                                        # scripts if page content changes
+        site.zip                        # inner package — rebuild with the
+                                        # Python rebuild scripts when page
+                                        # content changes (see README.md)
       META-INF/vault/
-        config.xml                      # shared, copied into both packages
+        config.xml                      # shared vault config, copied into both
         filter.xml                      # used only for template package
         properties.xml                  # used only for template package
 """
@@ -33,6 +41,13 @@ import zipfile
 
 CONTENT_PKG_DIR = "content-package"
 SITE_ZIP_REL = "jcr_root/conf/global/site-templates/b2b-ue-1.0.0/site.zip"
+
+# Paths inside site.zip to skip in the full-install package.
+# dam:AssetModel node type may not exist on all AEM Cloud instances.
+SITE_ZIP_SKIP_PREFIXES = (
+    "META-INF",
+    "jcr_root/conf/b2b-ue/settings/dam/cfm/models",
+)
 
 DEFAULT_VERSION = "1.0.0"
 
@@ -53,20 +68,30 @@ def build_template(version: str) -> str:
         os.remove(out)
 
     with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as z:
-        for root, _dirs, files in os.walk(CONTENT_PKG_DIR):
+        for root, _, files in os.walk(CONTENT_PKG_DIR):
             for fname in files:
                 full = os.path.join(root, fname)
                 arc = os.path.relpath(full, CONTENT_PKG_DIR)
                 z.write(full, arc)
 
-    print(f"  [template]      {out}  ({os.path.getsize(out)//1024} KB)")
+    print(f"  [template]      {out}  ({os.path.getsize(out) // 1024} KB)")
     return out
 
 
 def build_fullinstall(version: str) -> str:
     """
     Full-install package — template + all site content in one package.
-    Safe to reinstall: mode="replace" wipes and replaces each path.
+
+    Filter modes:
+      /conf/global/site-templates  → replace  (fixed, predictable structure)
+      /conf/b2b-ue                 → merge    (preserve AEM-managed settings)
+      /content/b2b-ue              → merge    (preserve site-level properties
+                                               set by Quick Site Creation)
+      /content/dam/b2b-ue          → replace  (fully controlled asset set)
+
+    Using merge for conf/content means reinstall adds/updates nodes from the
+    package but does NOT delete nodes that exist in AEM but not in the package.
+    This is intentional — it keeps Quick Site Creation's configuration intact.
     """
     site_zip_path = os.path.join(CONTENT_PKG_DIR, SITE_ZIP_REL)
     if not os.path.exists(site_zip_path):
@@ -79,13 +104,15 @@ def build_fullinstall(version: str) -> str:
     filter_xml = """\
 <?xml version="1.0" encoding="UTF-8"?>
 <workspaceFilter version="1.0">
-  <!-- Site template — Quick Site Creation still works after this package -->
+  <!-- Site template: replace is safe — fixed, predictable structure -->
   <filter root="/conf/global/site-templates/b2b-ue-1.0.0" mode="replace"/>
-  <!-- Site configuration (CF models, settings) -->
-  <filter root="/conf/b2b-ue" mode="replace"/>
-  <!-- Page content -->
-  <filter root="/content/b2b-ue" mode="replace"/>
-  <!-- DAM assets -->
+  <!-- Site configuration: merge — preserves AEM-managed settings.
+       CF model nodes are excluded (see build-packages.py SITE_ZIP_SKIP_PREFIXES). -->
+  <filter root="/conf/b2b-ue"/>
+  <!-- Page content: merge — preserves site-level properties (cq:conf,
+       sling:configRef etc.) that Quick Site Creation writes to the root page. -->
+  <filter root="/content/b2b-ue"/>
+  <!-- DAM assets: replace — fully controlled by this package -->
   <filter root="/content/dam/b2b-ue" mode="replace"/>
 </workspaceFilter>
 """
@@ -97,36 +124,42 @@ def build_fullinstall(version: str) -> str:
   <entry key="name">b2b-ue-site</entry>
   <entry key="version">{version}</entry>
   <entry key="group">b2b-ue</entry>
-  <entry key="description">B2B UE — Full site install (template + content). Reinstall-safe.</entry>
+  <entry key="description">B2B UE — Full site install (template + content). Merge-safe reinstall.</entry>
   <entry key="requiresRoot">false</entry>
   <entry key="packageType">content</entry>
 </properties>
 """
 
+    skipped = []
+
     with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as z:
-        # META-INF — custom filter + properties, shared config
+        # META-INF — custom filter + properties, shared vault config
         z.writestr("META-INF/vault/filter.xml", filter_xml)
         z.writestr("META-INF/vault/properties.xml", properties_xml)
         z.writestr("META-INF/vault/config.xml",
                    _read_src("META-INF/vault/config.xml").decode())
 
-        # jcr_root from content-package (the site template tree)
+        # jcr_root from content-package/ (the site template tree)
         src_jcr = os.path.join(CONTENT_PKG_DIR, "jcr_root")
-        for root, _dirs, files in os.walk(src_jcr):
+        for root, _, files in os.walk(src_jcr):
             for fname in files:
                 full = os.path.join(root, fname)
                 arc = os.path.relpath(full, CONTENT_PKG_DIR)
                 z.write(full, arc)
 
         # jcr_root from site.zip (page content, DAM, conf/b2b-ue)
-        # Skip META-INF — we already wrote our own above
+        # Skip META-INF (already written above) and excluded paths.
         with zipfile.ZipFile(site_zip_path, "r") as site_z:
             for item in site_z.infolist():
-                if item.filename.startswith("META-INF"):
+                if any(item.filename.startswith(p) for p in SITE_ZIP_SKIP_PREFIXES):
+                    skipped.append(item.filename)
                     continue
                 z.writestr(item.filename, site_z.read(item.filename))
 
-    print(f"  [full install]  {out}  ({os.path.getsize(out)//1024} KB)")
+    if skipped:
+        print(f"  [full install]  skipped {len(skipped)} excluded entries "
+              f"(CF models / META-INF)")
+    print(f"  [full install]  {out}  ({os.path.getsize(out) // 1024} KB)")
     return out
 
 
