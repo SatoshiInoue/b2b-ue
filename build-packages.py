@@ -42,12 +42,15 @@ SITE_ZIP_REL = "jcr_root/conf/global/site-templates/b2b-ue-1.0.0/site.zip"
 
 # Prefixes inside site.zip to exclude when embedding in any output package.
 # - META-INF: rebuilt per package
-# - CF models: dam:AssetModel node type may not exist on all AEM Cloud instances;
-#   if present during QSC or direct install, the error causes a full rollback
-#   and the site content never gets created.
+# - conf/b2b-ue: entirely excluded from the cleaned site.zip used in the template
+#   package.  /conf/b2b-ue is OWNED by Quick Site Creation — QSC writes the
+#   franklin.delivery GitHub proxy config there as part of its own setup.
+#   Including any /conf/b2b-ue content in site.zip can interfere with QSC's conf
+#   creation (race condition or filter replace wiping the proxy config) and is the
+#   primary cause of QSC not creating the site successfully.
 SITE_ZIP_SKIP_PREFIXES = (
     "META-INF",
-    "jcr_root/conf/b2b-ue/settings/dam/cfm/models",
+    "jcr_root/conf/b2b-ue",
 )
 
 DEFAULT_VERSION = "1.0.0"
@@ -61,13 +64,15 @@ def _read_src(rel_path: str) -> bytes:
 
 def _cleaned_site_zip_bytes() -> bytes:
     """
-    Return a cleaned site.zip with CF model nodes removed.
+    Return a cleaned site.zip for embedding in the template package.
 
-    The original site.zip includes /conf/b2b-ue/settings/dam/cfm/models/ which
-    requires the dam:AssetModel JCR node type.  If that type is missing, the
-    package manager raises an error and rolls back the ENTIRE site.zip install,
-    leaving the site with no content pages.  Removing those nodes prevents the
-    rollback so QSC (and direct installs) create the content successfully.
+    Changes vs. the source site.zip:
+    1. All jcr_root/conf/b2b-ue entries are removed — /conf/b2b-ue is owned
+       entirely by Quick Site Creation.  QSC writes the franklin.delivery GitHub
+       proxy config there; any content we ship in site.zip can race with or
+       overwrite that write, causing QSC to not create the site.
+    2. filter.xml is rewritten to remove the <filter root="/conf/b2b-ue"/> entry
+       so Vault does not try to manage that path at all during QSC install.
     """
     src_path = os.path.join(CONTENT_PKG_DIR, SITE_ZIP_REL)
     buf = io.BytesIO()
@@ -79,14 +84,28 @@ def _cleaned_site_zip_bytes() -> bytes:
                 skipped += 1
                 continue
             dst.writestr(item.filename, src.read(item.filename))
-        # Copy META-INF as-is (filter still covers /conf/b2b-ue so QSC writes
-        # its cloud config there; we just don't ship broken CF model nodes)
+        # Rewrite filter.xml without the /conf/b2b-ue filter — QSC owns that path
+        original_filter = src.read("META-INF/vault/filter.xml").decode()
+        cleaned_filter = _remove_conf_filter(original_filter)
+        dst.writestr("META-INF/vault/filter.xml", cleaned_filter)
+        # Copy other META-INF files (properties.xml, etc.) unchanged
         for item in src.infolist():
-            if item.filename.startswith("META-INF"):
+            if item.filename.startswith("META-INF") and \
+               item.filename != "META-INF/vault/filter.xml":
                 dst.writestr(item.filename, src.read(item.filename))
     if skipped:
-        print(f"    (cleaned site.zip: removed {skipped} CF model entries)")
+        print(f"    (cleaned site.zip: removed {skipped} /conf/b2b-ue entries)")
     return buf.getvalue()
+
+
+def _remove_conf_filter(filter_xml: str) -> str:
+    """Remove <filter root="/conf/b2b-ue"...> lines from a filter.xml string."""
+    import re
+    # Remove the filter element for /conf/b2b-ue (handles self-closing or block)
+    cleaned = re.sub(
+        r'\s*<filter root="/conf/b2b-ue"[^/]*/>', '', filter_xml
+    )
+    return cleaned
 
 
 def build_template(version: str) -> str:
