@@ -8,6 +8,10 @@ const ICONS = {
   monitor: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>`,
   lock: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>`,
   cube: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/></svg>`,
+  clock: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>`,
+  'check-shield': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l7 4v6c0 4.4-3 8.5-7 10C5 20.5 2 16.4 2 12V6l10-4z"/><path d="M8.5 12l2.5 2.5 4.5-4.5"/></svg>`,
+  'bar-chart': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18"/><rect x="4" y="14" width="4" height="6"/><rect x="10" y="9" width="4" height="11"/><rect x="16" y="4" width="4" height="16"/></svg>`,
+  globe: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M2 12h20M12 2c-2.8 3.3-4.4 6.6-4.4 10s1.6 6.7 4.4 10M12 2c2.8 3.3 4.4 6.6 4.4 10s-1.6 6.7-4.4 10"/></svg>`,
 };
 
 export default function decorate(block) {
@@ -41,8 +45,8 @@ export default function decorate(block) {
       if (ctaStyle) bp.classList.add(ctaStyle);
     });
 
-    // Inject icon for solution-tile style
-    if (cardStyle === 'solution-tile' && iconKey && ICONS[iconKey]) {
+    // Inject icon for solution-tile and feature-tile styles
+    if ((cardStyle === 'solution-tile' || cardStyle === 'feature-tile') && iconKey && ICONS[iconKey]) {
       const iconEl = document.createElement('div');
       iconEl.className = 'cards-card-icon';
       iconEl.innerHTML = ICONS[iconKey];

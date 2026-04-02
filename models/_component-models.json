@@ -163,6 +163,10 @@
           {
             "name": "Highlight",
             "value": "highlight"
+          },
+          {
+            "name": "Feature Split",
+            "value": "feature-split"
           }
         ]
       }
@@ -198,7 +202,8 @@
           { "name": "Image Left", "value": "image-left" },
           { "name": "Image Right", "value": "image-right" },
           { "name": "Teaser Overlay", "value": "teaser-overlay" },
-          { "name": "Solution Tile", "value": "solution-tile" }
+          { "name": "Solution Tile", "value": "solution-tile" },
+          { "name": "Feature Tile", "value": "feature-tile" }
         ]
       },
       {
@@ -226,7 +231,11 @@
           { "name": "Waveform / Monitoring", "value": "waveform" },
           { "name": "Monitor / Display", "value": "monitor" },
           { "name": "Lock / QC", "value": "lock" },
-          { "name": "Cube / Additive", "value": "cube" }
+          { "name": "Cube / Additive", "value": "cube" },
+          { "name": "Clock / Traceability", "value": "clock" },
+          { "name": "Shield / Accuracy", "value": "check-shield" },
+          { "name": "Bar Chart / IIoT", "value": "bar-chart" },
+          { "name": "Globe / Global Service", "value": "globe" }
         ]
       }
     ]
@@ -251,6 +260,29 @@
         "name": "subtitle",
         "label": "Subtitle",
         "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "ctaText",
+        "label": "CTA Text",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "ctaLink",
+        "label": "CTA Link (URL)",
+        "valueType": "string"
+      },
+      {
+        "component": "select",
+        "name": "style",
+        "label": "Style",
+        "valueType": "string",
+        "value": "",
+        "options": [
+          { "name": "Default (centered)", "value": "" },
+          { "name": "Dark Left", "value": "dark-left" }
+        ]
       }
     ]
   },

@@ -37,6 +37,29 @@
           "name": "subtitle",
           "label": "Subtitle",
           "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "ctaText",
+          "label": "CTA Text",
+          "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "ctaLink",
+          "label": "CTA Link (URL)",
+          "valueType": "string"
+        },
+        {
+          "component": "select",
+          "name": "style",
+          "label": "Style",
+          "valueType": "string",
+          "value": "",
+          "options": [
+            { "name": "Default (centered)", "value": "" },
+            { "name": "Dark Left", "value": "dark-left" }
+          ]
         }
       ]
     }

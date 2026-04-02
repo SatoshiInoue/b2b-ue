@@ -337,6 +337,37 @@ main .section.section-has-bg > div {
   z-index: 1;
 }
 
+/* ----------------------------------------
+   Feature Split — 2-column dark layout
+   Left: section-header (dark-left), Right: cards (feature-tile)
+----------------------------------------- */
+main .section.feature-split {
+  background-color: #001840;
+  padding: 0;
+}
+
+main .section.feature-split > div {
+  max-width: unset;
+  padding: 0;
+}
+
+@media (width >= 900px) {
+  main .section.feature-split {
+    display: flex;
+    align-items: stretch;
+  }
+
+  main .section.feature-split > div:first-child {
+    flex: 0 0 42%;
+    display: flex;
+    align-items: center;
+  }
+
+  main .section.feature-split > div:last-child {
+    flex: 1;
+  }
+}
+
 /* Universal Editor edit mode */
 .adobe-ue-edit header,
 .adobe-ue-preview header {

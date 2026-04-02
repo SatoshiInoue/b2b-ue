@@ -62,7 +62,8 @@
             { "name": "Image Left", "value": "image-left" },
             { "name": "Image Right", "value": "image-right" },
             { "name": "Teaser Overlay", "value": "teaser-overlay" },
-            { "name": "Solution Tile", "value": "solution-tile" }
+            { "name": "Solution Tile", "value": "solution-tile" },
+            { "name": "Feature Tile", "value": "feature-tile" }
           ]
         },
         {
@@ -90,7 +91,11 @@
             { "name": "Waveform / Monitoring", "value": "waveform" },
             { "name": "Monitor / Display", "value": "monitor" },
             { "name": "Lock / QC", "value": "lock" },
-            { "name": "Cube / Additive", "value": "cube" }
+            { "name": "Cube / Additive", "value": "cube" },
+            { "name": "Clock / Traceability", "value": "clock" },
+            { "name": "Shield / Accuracy", "value": "check-shield" },
+            { "name": "Bar Chart / IIoT", "value": "bar-chart" },
+            { "name": "Globe / Global Service", "value": "globe" }
           ]
         }
       ]

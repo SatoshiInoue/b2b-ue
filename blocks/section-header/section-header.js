@@ -1,25 +1,68 @@
 import { moveInstrumentation } from '../../scripts/scripts.js';
 
+function ueText(el, prop, label) {
+  el.dataset.aueProp = prop;
+  el.dataset.aueType = 'text';
+  el.dataset.aueLabel = label;
+  return el;
+}
+
 export default function decorate(block) {
   const rows = [...block.querySelectorAll(':scope > div')];
-  const getText = (i) => rows[i]?.querySelector(':scope > div:last-child')?.textContent?.trim() || '';
-  const getHTML = (i) => rows[i]?.querySelector(':scope > div:last-child')?.innerHTML || '';
+  const getCell = (i) => rows[i]?.querySelector(':scope > div:last-child');
 
-  const eyebrow = getText(0);
-  const heading = getText(1);
-  const subtitle = getHTML(2);
+  // Field order: eyebrow(0), heading(1), subtitle(2), ctaText(3), ctaLink(4), style(5)
+  const style = getCell(5)?.textContent?.trim() || '';
+  if (style) block.classList.add(style);
 
-  const el = document.createElement('div');
-  el.className = 'section-header-inner';
-  el.innerHTML = `
-    ${eyebrow ? `<p class="section-header-eyebrow"><span class="section-header-line"></span>${eyebrow}<span class="section-header-line"></span></p>` : ''}
-    ${heading ? `<h2 class="section-header-heading">${heading}</h2>` : ''}
-    ${subtitle ? `<div class="section-header-subtitle">${subtitle}</div>` : ''}
-  `;
+  const isDark = style.includes('dark');
 
-  // Preserve UE instrumentation from each source row onto the new element
-  rows.forEach((row) => moveInstrumentation(row, el));
+  const inner = document.createElement('div');
+  inner.className = 'section-header-inner';
+
+  // Eyebrow — text property, use ueText
+  const eyebrowText = getCell(0)?.textContent?.trim();
+  if (eyebrowText) {
+    const p = ueText(document.createElement('p'), 'eyebrow', 'Eyebrow');
+    p.className = 'section-header-eyebrow';
+    if (isDark) {
+      p.textContent = eyebrowText;
+    } else {
+      const lineL = document.createElement('span');
+      lineL.className = 'section-header-line';
+      const lineR = document.createElement('span');
+      lineR.className = 'section-header-line';
+      p.append(lineL, eyebrowText, lineR);
+    }
+    inner.append(p);
+  }
+
+  // Heading
+  const h2 = ueText(document.createElement('h2'), 'heading', 'Heading');
+  h2.className = 'section-header-heading';
+  h2.textContent = getCell(1)?.textContent?.trim() || '';
+  inner.append(h2);
+
+  // Subtitle — richtext, child JCR node, use moveInstrumentation
+  const subtitleCell = getCell(2);
+  if (subtitleCell?.innerHTML?.trim()) {
+    const div = document.createElement('div');
+    div.className = 'section-header-subtitle';
+    moveInstrumentation(subtitleCell, div);
+    div.innerHTML = subtitleCell.innerHTML;
+    inner.append(div);
+  }
+
+  // CTA link (optional, primarily for dark-left variant)
+  const ctaText = getCell(3)?.textContent?.trim();
+  if (ctaText) {
+    const a = ueText(document.createElement('a'), 'ctaText', 'CTA Text');
+    a.className = 'section-header-cta';
+    a.href = getCell(4)?.textContent?.trim() || '#';
+    a.textContent = `${ctaText} →`;
+    inner.append(a);
+  }
 
   block.textContent = '';
-  block.append(el);
+  block.append(inner);
 }

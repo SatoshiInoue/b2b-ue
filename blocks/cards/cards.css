@@ -593,3 +593,104 @@
     height: 180px;
   }
 }
+
+
+/* ----------------------------------------
+   Feature Tile — icon + text, no image, dark bg
+----------------------------------------- */
+.cards > ul:has(> li.feature-tile) {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0;
+  flex: unset;
+  padding: 0;
+}
+
+.cards > ul > li.feature-tile {
+  flex-direction: column;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 36px 32px;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cards > ul:has(> li.feature-tile) > li.feature-tile:nth-child(2n) {
+  border-right: none;
+}
+
+.cards > ul:has(> li.feature-tile) > li.feature-tile:nth-last-child(-n+2) {
+  border-bottom: none;
+}
+
+.cards > ul > li.feature-tile .cards-card-image {
+  display: none;
+}
+
+.cards > ul > li.feature-tile .cards-card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: rgba(232, 180, 0, 0.14);
+  border: 1px solid rgba(232, 180, 0, 0.28);
+  border-radius: 8px;
+  color: #e8b400;
+  margin-bottom: 20px;
+}
+
+.cards > ul > li.feature-tile .cards-card-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.cards > ul > li.feature-tile .cards-card-body {
+  background: transparent;
+  padding: 0;
+  margin: 0;
+}
+
+.cards > ul > li.feature-tile .cards-card-body h1,
+.cards > ul > li.feature-tile .cards-card-body h2,
+.cards > ul > li.feature-tile .cards-card-body h3 {
+  margin: 0 0 10px;
+  color: #ffffff;
+  font-family: 'Inter Tight', 'Inter', system-ui, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.cards > ul > li.feature-tile .cards-card-body p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+@media (width < 900px) {
+  .cards > ul > li.feature-tile {
+    padding: 28px 24px;
+  }
+}
+
+@media (width < 600px) {
+  .cards > ul:has(> li.feature-tile) {
+    grid-template-columns: 1fr;
+  }
+
+  .cards > ul > li.feature-tile {
+    border-right: none;
+    padding: 24px 20px;
+  }
+
+  .cards > ul:has(> li.feature-tile) > li.feature-tile:nth-last-child(-n+2) {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .cards > ul:has(> li.feature-tile) > li.feature-tile:last-child {
+    border-bottom: none;
+  }
+}
