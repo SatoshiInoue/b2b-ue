@@ -40,9 +40,10 @@
 }
 
 /* --------------------------------
-   Dark gradient overlay
+   Dark gradient overlay + gold accent bar — CSS only, no DOM nodes
 --------------------------------- */
-.hero-b2b .hero-b2b-overlay {
+.hero-b2b::before {
+  content: '';
   position: absolute;
   inset: 0;
   z-index: 1;
@@ -54,10 +55,8 @@
   );
 }
 
-/* --------------------------------
-   Gold left accent bar
---------------------------------- */
-.hero-b2b .hero-b2b-accent {
+.hero-b2b::after {
+  content: '';
   position: absolute;
   left: 0;
   top: 0;
@@ -210,12 +209,15 @@
   text-transform: uppercase;
 }
 
-.hero-b2b .hero-b2b-stat-divider {
+.hero-b2b .hero-b2b-stat + .hero-b2b-stat::before {
+  content: '';
+  display: block;
   width: 1px;
   height: 32px;
   background: rgba(255, 255, 255, 0.25);
   margin: 0 24px 0 0;
   flex-shrink: 0;
+  align-self: center;
 }
 
 /* --------------------------------

@@ -75,48 +75,50 @@ moveInstrumentation(row, li); // preserves data-aue-* attributes for Universal E
 while (row.firstElementChild) li.append(row.firstElementChild);
 ```
 
-### CRITICAL: making ALL fields inline-editable in Universal Editor
+### Universal Editor editability — how it works
 
-AEM injects `data-aue-prop` / `data-aue-type` / `data-aue-label` attributes onto each
-field's **value cell** (second `<div>` of each row) at server-render time:
-- `reference` and `richtext` fields → get `data-aue-resource` (child JCR node) → appear in the UE content tree automatically
-- `text`, `select`, `boolean`, `number` fields → get `data-aue-prop` on the value cell → only editable inline if you transfer those attributes to the new DOM element
+`component-models.json` drives the **Properties panel** automatically. All model
+fields appear there when you select a block — no JS changes needed.
 
-**If you use `block.innerHTML = ...` or discard the original rows without calling
-`moveInstrumentation`, all text/select/boolean fields lose their edit handles and
-become invisible to Universal Editor.** This is the #1 cause of "I can only edit
-image and description" complaints.
+For **inline canvas editing** (clicking directly on text in the WYSIWYG), UE looks
+for `data-aue-prop` on DOM elements. AEM injects those onto the original rendered
+cells at server-render time. The `title` block works without a decorator because
+those cells are never modified.
 
-The correct pattern — use DOM construction + `moveInstrumentation` for every field:
+**Never use `block.innerHTML = '...'` in a decorator.** It:
+- discards every original cell (and their AEM-injected `data-aue-*` attributes)
+- triggers a full DOM re-parse (performance cost)
+- creates an XSS surface when interpolating content values (especially URLs) into strings
+
+**Always use DOM API** (`createElement`, `appendChild`, `textContent`) with
+`moveInstrumentation` to transfer the original cell's UE attributes to the new element.
+
+#### Pattern A — restructure without creating new content nodes (preferred)
+When the new element can wrap the original cell's children, move them in.
+The original children keep their UE attributes. See `blocks/cards/cards.js`.
 
 ```javascript
-import { moveInstrumentation } from '../../scripts/scripts.js';
-
-export default function decorate(block) {
-  const rows = [...block.querySelectorAll(':scope > div')];
-  const getCell = (i) => rows[i]?.querySelector(':scope > div:last-child');
-
-  // For each text field: create element, set content, move UE attributes
-  const titleCell = getCell(0);
-  const titleEl = document.createElement('h2');
-  titleEl.textContent = titleCell?.textContent?.trim() || '';
-  moveInstrumentation(titleCell, titleEl); // transfers data-aue-prop="title" etc.
-
-  // For richtext fields: keep innerHTML, move instrumentation from cell
-  const bodyCell = getCell(1);
-  const bodyEl = document.createElement('div');
-  bodyEl.innerHTML = bodyCell?.innerHTML || '';
-  moveInstrumentation(bodyCell, bodyEl);
-
-  // Build and replace — never discard cells before calling moveInstrumentation
-  block.innerHTML = '';
-  block.append(titleEl, bodyEl);
-}
+const li = document.createElement('li');
+moveInstrumentation(row, li);         // transfer row's data-aue-* to li
+while (row.firstElementChild) li.append(row.firstElementChild);  // preserve children
 ```
 
-**Rule:** every call to `document.createElement` that represents a model field must
-be followed by `moveInstrumentation(cell, newEl)` before appending to the DOM.
-See `blocks/hero-b2b/hero-b2b.js` for a full multi-field example.
+#### Pattern B — rebuild with different semantics (complex blocks like hero)
+When new semantic elements are needed (h1, a, span), create them with DOM API,
+call `moveInstrumentation(originalCell, newElement)` to transfer the AEM-injected
+attributes, then set content via `textContent` / `innerHTML`.
+
+```javascript
+const h1 = document.createElement('h1');
+h1.className = 'my-headline';
+moveInstrumentation(headlineCell, h1);   // transfers data-aue-prop="header" etc.
+h1.textContent = headlineCell?.textContent?.trim() || '';
+contentDiv.append(h1);
+```
+
+Use pseudo-elements (`::before`, `::after`) for purely decorative DOM nodes
+(overlays, dividers, accent bars) — keeps the JS lean and those elements out of
+the UE content tree. See `blocks/hero-b2b/` for a complete example.
 
 ### Optimizing images
 
