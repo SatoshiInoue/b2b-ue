@@ -99,10 +99,11 @@ This runs `build-packages.py`, which:
 **Approach 1 — Template → Quick Site Creation (recommended for new environments):**
 1. Go to CRX Package Manager (`/crx/packmgr`)
 2. Upload and install `b2b-ue-template-1.0.0.zip`
-3. Go to AEM Sites console → **Create → Site from Template**
-4. Select **B2B UE Starter** → fill in title → Create
-5. AEM installs the embedded `site.zip` — the site is created at `/content/b2b-ue/` with all blocks pre-configured (hero-b2b, solutions grid, etc.)
-6. This also writes the `franklin.delivery` proxy config to `/conf/b2b-ue`, which Universal Editor needs to load component models
+3. **Pre-flight check:** If `/content/dam/b2b-ue` exists from a previous install, delete it via CRXDE Lite before continuing. An existing DAM tree causes `site.zip` to roll back during QSC, leaving no site.
+4. Go to AEM Sites console → **Create → Site from Template**
+5. Select **B2B UE Starter** → fill in title → Create
+6. AEM installs the embedded `site.zip` — the site is created at `/content/b2b-ue/` with all blocks pre-configured (hero-b2b, solutions grid, etc.)
+7. This also writes the `franklin.delivery` proxy config to `/conf/b2b-ue`, which Universal Editor needs to load component models
 
 **Approach 2 — Content package (dev iteration / bulk updates / standalone install):**
 1. Go to CRX Package Manager → upload and install `b2b-ue-site-1.0.0.zip`
