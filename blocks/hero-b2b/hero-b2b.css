@@ -152,6 +152,11 @@
   border-color: #d4a200;
 }
 
+.hero-b2b .hero-b2b-cta-primary::after,
+.hero-b2b .hero-b2b-cta-secondary::after {
+  content: none;
+}
+
 .hero-b2b .hero-b2b-cta-secondary {
   display: inline-block;
   background: transparent;
@@ -188,8 +193,22 @@
   padding: 0 24px 0 0;
 }
 
-.hero-b2b .hero-b2b-stat:first-child {
-  padding-left: 0;
+/* Vertical divider between stats — absolutely positioned so it doesn't
+   disrupt the flex column layout of value + label */
+.hero-b2b .hero-b2b-stat + .hero-b2b-stat {
+  position: relative;
+  padding-left: 24px;
+}
+
+.hero-b2b .hero-b2b-stat + .hero-b2b-stat::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.25);
 }
 
 .hero-b2b .hero-b2b-stat-value {
@@ -207,17 +226,6 @@
   font-weight: 400;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-}
-
-.hero-b2b .hero-b2b-stat + .hero-b2b-stat::before {
-  content: '';
-  display: block;
-  width: 1px;
-  height: 32px;
-  background: rgba(255, 255, 255, 0.25);
-  margin: 0 24px 0 0;
-  flex-shrink: 0;
-  align-self: center;
 }
 
 /* --------------------------------
@@ -303,15 +311,15 @@
     padding: 0 12px 0 0;
   }
 
+  .hero-b2b .hero-b2b-stat + .hero-b2b-stat {
+    padding-left: 12px;
+  }
+
   .hero-b2b .hero-b2b-stat-value {
     font-size: 16px;
   }
 
   .hero-b2b .hero-b2b-stat-label {
     font-size: 9px;
-  }
-
-  .hero-b2b .hero-b2b-stat-divider {
-    margin: 0 12px 0 0;
   }
 }
