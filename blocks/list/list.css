@@ -295,7 +295,7 @@
 }
 
 .list-news-featured {
-  flex: 1.4;
+  flex: 2;
 }
 
 .list-news-item > a {
@@ -316,11 +316,11 @@
   overflow: hidden;
   flex-shrink: 0;
   background: linear-gradient(135deg, #001840 0%, #003087 60%, #0055aa 100%);
-  height: 180px;
+  height: 170px;
 }
 
 .list-news-featured .list-news-image {
-  height: 220px;
+  height: 240px;
 }
 
 .list-news-image picture {

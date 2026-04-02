@@ -26,6 +26,7 @@ function readConfig(block) {
     pageSize: parseInt(get(7), 10) || 5,
     urlState: get(8) === 'true',
     listStyle: get(9) || 'card',
+    readMoreText: get(10) || '',
   };
 }
 
@@ -84,13 +85,29 @@ async function fetchAuthorListPages(rootPath, langCode) {
       const content = value['jcr:content'] || {};
       const title = content['jcr:title'] || key;
       const lastModifiedRaw = content['cq:lastModified'] || content['jcr:lastModified'] || '';
+
+      // Derive category: prefer cq:tags (AEM tagging), fall back to plain text property.
+      // cq:tags stores IDs like "b2b-ue:news-category/product-launch" → "PRODUCT LAUNCH"
+      let category = '';
+      const cqTags = content['cq:tags'];
+      if (Array.isArray(cqTags) && cqTags.length > 0) {
+        const tagId = String(cqTags[0]);
+        const slug = tagId.split('/').pop() || tagId.split(':').pop() || '';
+        category = slug.replace(/-/g, ' ').toUpperCase();
+      } else if (typeof cqTags === 'string' && cqTags) {
+        const slug = cqTags.split('/').pop() || cqTags.split(':').pop() || '';
+        category = slug.replace(/-/g, ' ').toUpperCase();
+      } else {
+        category = content.category || '';
+      }
+
       pages.push({
         path: `${rootPath}/${key}`,
         jcrPath: `${jcrRoot}/${key}`,
         title,
         description: content['jcr:description'] || '',
         image: '',
-        category: content.category || '',
+        category,
         lastModified: lastModifiedRaw ? new Date(lastModifiedRaw).getTime() / 1000 : 0,
         listOrder: parseInt(content.listOrder, 10) || null,
       });
@@ -297,11 +314,12 @@ function renderList(pages, config) {
 /**
  * Renders the "news-featured" layout: first card is featured (larger),
  * the rest are secondary. Always shows image, category badge, date, title,
- * description, and "Read more" link. Mobile: secondary cards go horizontal.
+ * description, and an optional read-more link. Mobile: secondary cards go horizontal.
  * @param {Array} pages
+ * @param {string} readMoreText  Label for the read-more link; empty string hides the link.
  * @returns {Element}
  */
-function renderNewsFeatured(pages) {
+function renderNewsFeatured(pages, readMoreText) {
   const ul = document.createElement('ul');
   ul.className = 'list-news-grid';
 
@@ -367,10 +385,12 @@ function renderNewsFeatured(pages) {
       body.append(desc);
     }
 
-    const readMore = document.createElement('p');
-    readMore.className = 'list-news-readmore';
-    readMore.textContent = 'Read more →';
-    body.append(readMore);
+    if (readMoreText) {
+      const readMore = document.createElement('p');
+      readMore.className = 'list-news-readmore';
+      readMore.textContent = readMoreText;
+      body.append(readMore);
+    }
 
     a.append(body);
     li.append(a);
@@ -450,10 +470,14 @@ function renderPaginatedList(pages, config, block) {
 
   function render(page) {
     // Remove previous list and controls, leave other block children intact
-    block.querySelectorAll('.list-items, .list-pagination').forEach((el) => el.remove());
+    block.querySelectorAll('.list-items, .list-news-grid, .list-pagination').forEach((el) => el.remove());
 
     const slice = pages.slice(page * pageSize, (page + 1) * pageSize);
-    block.append(renderList(slice, config));
+    if (config.listStyle === 'news-featured') {
+      block.append(renderNewsFeatured(slice, config.readMoreText));
+    } else {
+      block.append(renderList(slice, config));
+    }
 
     if (totalPages > 1) {
       block.append(buildPaginationControls(page, totalPages, onPageChange));
@@ -506,10 +530,10 @@ export default async function decorate(block) {
   const sorted = sortPages(pages, sortBy);
   const limited = limit > 0 ? sorted.slice(0, limit) : sorted;
 
-  if (listStyle === 'news-featured') {
-    block.append(renderNewsFeatured(limited));
-  } else if (paginate && limited.length > pageSize) {
+  if (paginate && limited.length > pageSize) {
     renderPaginatedList(limited, config, block);
+  } else if (listStyle === 'news-featured') {
+    block.append(renderNewsFeatured(limited, config.readMoreText));
   } else {
     block.append(renderList(limited, config));
   }

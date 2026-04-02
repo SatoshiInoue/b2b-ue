@@ -46,6 +46,25 @@
       "valueType": "number",
       "name": "listOrder",
       "label": "List Order"
+    },
+    {
+      "component": "tab",
+      "label": "Article",
+      "name": "tab-article"
+    },
+    {
+      "component": "aem-tag",
+      "name": "cq:tags",
+      "label": "Category Tag",
+      "description": "Select a news category tag. Sets the badge shown on list cards.",
+      "rootPath": "/content/cq:tags/b2b-ue/news-category"
+    },
+    {
+      "component": "text",
+      "valueType": "string",
+      "name": "category",
+      "label": "Category (plain text)",
+      "description": "Fallback display label if no tag is selected (e.g. PRODUCT LAUNCH). Used by the published query index."
     }
   ]
 }

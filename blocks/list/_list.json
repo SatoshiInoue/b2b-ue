@@ -114,6 +114,13 @@
             { "name": "News Featured", "value": "news-featured" }
           ],
           "value": "card"
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "readMoreText",
+          "label": "Read More Label",
+          "description": "Text for the read-more link on news-featured cards. Leave blank to hide. E.g. 'Read more' or 'Continue reading'."
         }
       ]
     }

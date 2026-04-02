@@ -149,12 +149,13 @@
   }
 
   .section-header.news-inline .section-header-heading {
-    font-size: 24px;
-    flex-basis: 100%;
+    font-size: 22px;
+    /* flex: 1 keeps heading and CTA on the same row — do NOT set flex-basis: 100% */
   }
 
   .section-header.news-inline .section-header-cta {
     font-size: 11px;
+    white-space: nowrap;
   }
 }
 

@@ -193,6 +193,8 @@ def build_fullinstall(version: str) -> str:
        Replace would roll back the entire install if /content/dam/b2b-ue already
        exists with assets from a previous install. -->
   <filter root="/content/dam/b2b-ue" mode="merge"/>
+  <!-- Tag taxonomy: merge — adds new category tags without wiping author-created tags -->
+  <filter root="/content/cq:tags/b2b-ue" mode="merge"/>
   <!-- /conf/b2b-ue is intentionally omitted: owned by Quick Site Creation.
        Touching it breaks the franklin.delivery GitHub proxy that serves
        component-models.json / component-filters.json to Universal Editor. -->

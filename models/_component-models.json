@@ -47,6 +47,25 @@
         "valueType": "number",
         "name": "listOrder",
         "label": "List Order"
+      },
+      {
+        "component": "tab",
+        "label": "Article",
+        "name": "tab-article"
+      },
+      {
+        "component": "aem-tag",
+        "name": "cq:tags",
+        "label": "Category Tag",
+        "description": "Select a news category tag. Sets the badge shown on list cards.",
+        "rootPath": "/content/cq:tags/b2b-ue/news-category"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "category",
+        "label": "Category (plain text)",
+        "description": "Display label for the category badge (e.g. PRODUCT LAUNCH). Used by the published query index."
       }
     ]
   },
@@ -498,13 +517,39 @@
         "valueType": "number",
         "name": "limit",
         "label": "Max Items",
+        "description": "Maximum number of items to show. Set to 0 for no limit.",
         "value": 0
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "paginate",
+        "label": "Enable Pagination",
+        "description": "Show items across multiple pages instead of all at once.",
+        "value": false
+      },
+      {
+        "component": "number",
+        "valueType": "number",
+        "name": "pageSize",
+        "label": "Items Per Page",
+        "description": "Number of items per page (e.g. 5 or 10). Ignored when pagination is disabled.",
+        "value": 5
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "urlState",
+        "label": "Persist Page in URL",
+        "description": "Store the current page in ?page=N so links are shareable. Only applies when pagination is enabled.",
+        "value": false
       },
       {
         "component": "select",
         "valueType": "string",
         "name": "listStyle",
         "label": "List Style",
+        "description": "Visual style of the list.",
         "options": [
           { "name": "Card", "value": "card" },
           { "name": "Small", "value": "small" },
@@ -512,6 +557,13 @@
           { "name": "News Featured", "value": "news-featured" }
         ],
         "value": "card"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "readMoreText",
+        "label": "Read More Label",
+        "description": "Text for the read-more link on news-featured cards. Leave blank to hide. E.g. 'Read more' or 'Continue reading'."
       }
     ]
   }
