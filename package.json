@@ -11,6 +11,9 @@
     "build:json:models": "merge-json-cli -i \"models/_component-models.json\" -o \"component-models.json\"",
     "build:json:definitions": "merge-json-cli -i \"models/_component-definition.json\" -o \"component-definition.json\"",
     "build:json:filters": "merge-json-cli -i \"models/_component-filters.json\" -o \"component-filters.json\"",
+    "build:packages": "python3 build-packages.py",
+    "build:packages:template": "python3 build-packages.py --template-only",
+    "build:packages:site": "python3 build-packages.py --site-only",
     "prepare": "husky"
   },
   "author": "SatoshiInoue",
