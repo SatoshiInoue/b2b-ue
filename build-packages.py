@@ -69,10 +69,14 @@ def _cleaned_site_zip_bytes() -> bytes:
     Changes vs. the source site.zip:
     1. All jcr_root/conf/b2b-ue entries are removed — /conf/b2b-ue is owned
        entirely by Quick Site Creation.  QSC writes the franklin.delivery GitHub
-       proxy config there; any content we ship in site.zip can race with or
-       overwrite that write, causing QSC to not create the site.
-    2. filter.xml is rewritten to remove the <filter root="/conf/b2b-ue"/> entry
-       so Vault does not try to manage that path at all during QSC install.
+       proxy config there; any content we ship can race with or overwrite that
+       write, causing QSC to silently fail to create the site.
+    2. filter.xml is rewritten:
+       - /conf/b2b-ue filter removed entirely (QSC owns that path)
+       - /content/dam/b2b-ue changed to mode="merge" so that existing DAM
+         assets from a previous install do not cause a replace-rollback that
+         wipes the entire site.zip install (the root cause of QSC appearing to
+         create no site when /content/dam/b2b-ue already exists).
     """
     src_path = os.path.join(CONTENT_PKG_DIR, SITE_ZIP_REL)
     buf = io.BytesIO()
@@ -84,9 +88,9 @@ def _cleaned_site_zip_bytes() -> bytes:
                 skipped += 1
                 continue
             dst.writestr(item.filename, src.read(item.filename))
-        # Rewrite filter.xml without the /conf/b2b-ue filter — QSC owns that path
+        # Rewrite filter.xml: drop /conf/b2b-ue, set DAM to merge
         original_filter = src.read("META-INF/vault/filter.xml").decode()
-        cleaned_filter = _remove_conf_filter(original_filter)
+        cleaned_filter = _rewrite_site_zip_filter(original_filter)
         dst.writestr("META-INF/vault/filter.xml", cleaned_filter)
         # Copy other META-INF files (properties.xml, etc.) unchanged
         for item in src.infolist():
@@ -98,14 +102,22 @@ def _cleaned_site_zip_bytes() -> bytes:
     return buf.getvalue()
 
 
-def _remove_conf_filter(filter_xml: str) -> str:
-    """Remove <filter root="/conf/b2b-ue"...> lines from a filter.xml string."""
+def _rewrite_site_zip_filter(filter_xml: str) -> str:
+    """
+    Rewrite site.zip's filter.xml for safe QSC embedding:
+    - Remove the /conf/b2b-ue filter (QSC owns that path)
+    - Set /content/dam/b2b-ue to mode="merge" (prevents rollback if DAM exists)
+    """
     import re
-    # Remove the filter element for /conf/b2b-ue (handles self-closing or block)
-    cleaned = re.sub(
-        r'\s*<filter root="/conf/b2b-ue"[^/]*/>', '', filter_xml
+    # Drop /conf/b2b-ue filter entirely
+    out = re.sub(r'\s*<filter root="/conf/b2b-ue"[^/]*/>', '', filter_xml)
+    # Add mode="merge" to DAM filter (replace bare self-closing element)
+    out = re.sub(
+        r'<filter root="/content/dam/b2b-ue"\s*/>',
+        '<filter root="/content/dam/b2b-ue" mode="merge"/>',
+        out,
     )
-    return cleaned
+    return out
 
 
 def build_template(version: str) -> str:
@@ -173,12 +185,14 @@ def build_fullinstall(version: str) -> str:
 <workspaceFilter version="1.0">
   <!-- Site template: replace is safe — fixed, predictable structure -->
   <filter root="/conf/global/site-templates/b2b-ue-1.0.0" mode="replace"/>
-  <!-- Page content: merge — preserves site-level properties (cq:conf,
-       sling:configRef, franklin.delivery proxy config etc.) that Quick Site
-       Creation writes. Never use mode="replace" here. -->
-  <filter root="/content/b2b-ue"/>
-  <!-- DAM assets: replace — fully controlled by this package -->
-  <filter root="/content/dam/b2b-ue" mode="replace"/>
+  <!-- Page content: merge — adds/updates pages from the package but leaves
+       any pages the author created in UE untouched.  NEVER use replace here:
+       it would wipe all author-created content on every reinstall. -->
+  <filter root="/content/b2b-ue" mode="merge"/>
+  <!-- DAM assets: merge — adds/updates assets without removing existing ones.
+       Replace would roll back the entire install if /content/dam/b2b-ue already
+       exists with assets from a previous install. -->
+  <filter root="/content/dam/b2b-ue" mode="merge"/>
   <!-- /conf/b2b-ue is intentionally omitted: owned by Quick Site Creation.
        Touching it breaks the franklin.delivery GitHub proxy that serves
        component-models.json / component-filters.json to Universal Editor. -->
