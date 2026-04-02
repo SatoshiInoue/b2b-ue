@@ -19,12 +19,14 @@ export default function decorate(block) {
   [...block.children].forEach((row) => {
     const li = document.createElement('li');
 
-    // row.children[2] = cardstyle, row.children[3] = ctastyle, row.children[4] = icon
+    // row.children[2]=cardstyle [3]=ctastyle [4]=icon [5]=cardLink
     const cardStyle = row.children[2]?.querySelector('p')?.textContent?.trim() || '';
     const ctaStyle = row.children[3]?.querySelector('p')?.textContent?.trim() || '';
     const iconKey = row.children[4]?.querySelector('p')?.textContent?.trim() || '';
+    const cardLink = row.children[5]?.querySelector('p')?.textContent?.trim() || '';
 
     if (cardStyle) li.className = cardStyle;
+    if (cardLink) li.classList.add('cards-card-linkable');
 
     moveInstrumentation(row, li);
     while (row.firstElementChild) li.append(row.firstElementChild);
@@ -39,18 +41,39 @@ export default function decorate(block) {
       }
     });
 
-    // Apply CTA style to button containers
-    li.querySelectorAll('p.button-container').forEach((bp) => {
-      bp.classList.remove('default', 'cta-button', 'cta-button-secondary', 'cta-button-dark', 'cta-default');
-      if (ctaStyle) bp.classList.add(ctaStyle);
-    });
+    // Apply CTA style: map select value → class on a.button
+    if (ctaStyle) {
+      li.querySelectorAll('p.button-container a.button').forEach((btn) => {
+        btn.classList.remove('secondary', 'dark');
+        if (ctaStyle === 'button-secondary') btn.classList.add('secondary');
+        else if (ctaStyle === 'button-dark') btn.classList.add('dark');
+        // 'button' (primary) needs no extra class
+      });
+    }
 
-    // Inject icon for solution-tile and feature-tile styles
-    if ((cardStyle === 'solution-tile' || cardStyle === 'feature-tile') && iconKey && ICONS[iconKey]) {
+    // Inject icon
+    if (iconKey && ICONS[iconKey]) {
       const iconEl = document.createElement('div');
       iconEl.className = 'cards-card-icon';
       iconEl.innerHTML = ICONS[iconKey];
-      li.append(iconEl);
+      if (cardStyle === 'feature-tile') {
+        // feature-tile: icon is in normal flow — insert before body so it renders at top
+        const body = li.querySelector('.cards-card-body');
+        li.insertBefore(iconEl, body || null);
+      } else {
+        // solution-tile: absolutely positioned, DOM order doesn't matter
+        li.append(iconEl);
+      }
+    }
+
+    // Whole-card link overlay — sits above card bg, below interactive children
+    if (cardLink) {
+      const a = document.createElement('a');
+      a.className = 'cards-card-link';
+      a.href = cardLink;
+      a.setAttribute('aria-hidden', 'true');
+      a.tabIndex = -1;
+      li.append(a);
     }
 
     ul.append(li);

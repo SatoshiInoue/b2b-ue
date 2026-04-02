@@ -303,6 +303,12 @@
             "value": "globe"
           }
         ]
+      },
+      {
+        "component": "text",
+        "name": "cardLink",
+        "label": "Card Link (URL)",
+        "valueType": "string"
       }
     ]
   },

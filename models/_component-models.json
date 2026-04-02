@@ -237,6 +237,12 @@
           { "name": "Bar Chart / IIoT", "value": "bar-chart" },
           { "name": "Globe / Global Service", "value": "globe" }
         ]
+      },
+      {
+        "component": "text",
+        "name": "cardLink",
+        "label": "Card Link (URL)",
+        "valueType": "string"
       }
     ]
   },

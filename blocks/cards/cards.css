@@ -461,6 +461,40 @@
 
 
 /* ----------------------------------------
+   Whole-card link overlay
+----------------------------------------- */
+.cards > ul > li.cards-card-linkable {
+  position: relative;
+}
+
+.cards-card-link {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  /* no text, no content — purely a clickable overlay */
+}
+
+.cards-card-link::after {
+  content: none;
+}
+
+/* Interactive children sit above the overlay */
+.cards > ul > li.cards-card-linkable .cards-card-body {
+  position: relative;
+  z-index: 6;
+}
+
+.cards > ul > li.cards-card-linkable .cards-card-body p.button-container {
+  position: relative;
+  z-index: 7;
+}
+
+.cards > ul > li.cards-card-linkable .cards-card-icon {
+  position: relative;
+  z-index: 6;
+}
+
+/* ----------------------------------------
    Solution Tile — dark overlay card style
 ----------------------------------------- */
 .cards > ul:has(> li.solution-tile) {
