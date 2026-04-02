@@ -33,18 +33,21 @@ Source of truth:
 """
 
 import argparse
+import io
 import os
 import zipfile
 
 CONTENT_PKG_DIR = "content-package"
 SITE_ZIP_REL = "jcr_root/conf/global/site-templates/b2b-ue-1.0.0/site.zip"
 
-# Paths inside site.zip to skip in the full-install package.
-# /conf/b2b-ue is owned by Quick Site Creation (stores the franklin.delivery
-# GitHub proxy config). We never install it via the full-install package.
+# Prefixes inside site.zip to exclude when embedding in any output package.
+# - META-INF: rebuilt per package
+# - CF models: dam:AssetModel node type may not exist on all AEM Cloud instances;
+#   if present during QSC or direct install, the error causes a full rollback
+#   and the site content never gets created.
 SITE_ZIP_SKIP_PREFIXES = (
     "META-INF",
-    "jcr_root/conf/b2b-ue",
+    "jcr_root/conf/b2b-ue/settings/dam/cfm/models",
 )
 
 DEFAULT_VERSION = "1.0.0"
@@ -56,21 +59,63 @@ def _read_src(rel_path: str) -> bytes:
         return f.read()
 
 
+def _cleaned_site_zip_bytes() -> bytes:
+    """
+    Return a cleaned site.zip with CF model nodes removed.
+
+    The original site.zip includes /conf/b2b-ue/settings/dam/cfm/models/ which
+    requires the dam:AssetModel JCR node type.  If that type is missing, the
+    package manager raises an error and rolls back the ENTIRE site.zip install,
+    leaving the site with no content pages.  Removing those nodes prevents the
+    rollback so QSC (and direct installs) create the content successfully.
+    """
+    src_path = os.path.join(CONTENT_PKG_DIR, SITE_ZIP_REL)
+    buf = io.BytesIO()
+    skipped = 0
+    with zipfile.ZipFile(src_path, "r") as src, \
+         zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as dst:
+        for item in src.infolist():
+            if any(item.filename.startswith(p) for p in SITE_ZIP_SKIP_PREFIXES):
+                skipped += 1
+                continue
+            dst.writestr(item.filename, src.read(item.filename))
+        # Copy META-INF as-is (filter still covers /conf/b2b-ue so QSC writes
+        # its cloud config there; we just don't ship broken CF model nodes)
+        for item in src.infolist():
+            if item.filename.startswith("META-INF"):
+                dst.writestr(item.filename, src.read(item.filename))
+    if skipped:
+        print(f"    (cleaned site.zip: removed {skipped} CF model entries)")
+    return buf.getvalue()
+
+
 def build_template(version: str) -> str:
     """
-    Template-only package — mirrors content-package/ 1:1.
-    Install via Package Manager, then create site via Quick Site Creation.
+    Template package — installs the Quick Site Creation template.
+    When the developer runs Sites → Create → Site from Template, AEM installs
+    the embedded site.zip which creates /content/b2b-ue with all pre-configured
+    content (hero-b2b, solutions grid, etc.).
+
+    The site.zip is rebuilt on-the-fly with CF model nodes removed so the QSC
+    installation does not error and roll back the content pages.
     """
     out = f"b2b-ue-template-{version}.zip"
     if os.path.exists(out):
         os.remove(out)
+
+    cleaned = _cleaned_site_zip_bytes()
+    site_zip_arc = SITE_ZIP_REL  # arc path inside the outer zip
 
     with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as z:
         for root, _, files in os.walk(CONTENT_PKG_DIR):
             for fname in files:
                 full = os.path.join(root, fname)
                 arc = os.path.relpath(full, CONTENT_PKG_DIR)
-                z.write(full, arc)
+                if arc == site_zip_arc:
+                    # Replace with cleaned version
+                    z.writestr(arc, cleaned)
+                else:
+                    z.write(full, arc)
 
     print(f"  [template]      {out}  ({os.path.getsize(out) // 1024} KB)")
     return out
@@ -134,7 +179,12 @@ def build_fullinstall(version: str) -> str:
 </properties>
 """
 
-    skipped = []
+    # full-install skips: META-INF (custom below) + conf/b2b-ue (owned by QSC)
+    fullinstall_skip = (
+        "META-INF",
+        "jcr_root/conf/b2b-ue",
+    )
+    skipped = 0
 
     with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as z:
         # META-INF — custom filter + properties, shared vault config
@@ -151,18 +201,16 @@ def build_fullinstall(version: str) -> str:
                 arc = os.path.relpath(full, CONTENT_PKG_DIR)
                 z.write(full, arc)
 
-        # jcr_root from site.zip (page content, DAM, conf/b2b-ue)
-        # Skip META-INF (already written above) and excluded paths.
+        # jcr_root from site.zip (page content + DAM only — skip conf/b2b-ue)
         with zipfile.ZipFile(site_zip_path, "r") as site_z:
             for item in site_z.infolist():
-                if any(item.filename.startswith(p) for p in SITE_ZIP_SKIP_PREFIXES):
-                    skipped.append(item.filename)
+                if any(item.filename.startswith(p) for p in fullinstall_skip):
+                    skipped += 1
                     continue
                 z.writestr(item.filename, site_z.read(item.filename))
 
     if skipped:
-        print(f"  [full install]  skipped {len(skipped)} excluded entries "
-              f"(CF models / META-INF)")
+        print(f"  [full install]  skipped {skipped} entries (conf/b2b-ue + META-INF)")
     print(f"  [full install]  {out}  ({os.path.getsize(out) // 1024} KB)")
     return out
 

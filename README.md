@@ -88,27 +88,28 @@ npm run build:packages
 
 This runs `build-packages.py`, which:
 
-1. **`b2b-ue-template-1.0.0.zip`** — mirrors `content-package/` 1:1. Installs only the site template.
-2. **`b2b-ue-site-1.0.0.zip`** — combines the template with the expanded content from `site.zip`. Uses:
-   - `mode="replace"` for the template path and DAM (fixed/controlled structures)
-   - **No mode (merge)** for `/content/b2b-ue` — preserves site-level properties written by Quick Site Creation
-   - **`/conf/b2b-ue` is entirely excluded** — this path is owned by Quick Site Creation. It stores the `franklin.delivery` GitHub proxy config that lets AEM Author serve `component-models.json`, `component-filters.json`, and `component-definition.json` to Universal Editor. If this conf is overwritten or broken, those files 404 and the editor loses all component models and styles.
+1. **`b2b-ue-template-1.0.0.zip`** — installs the Quick Site Creation template. The embedded `site.zip` is rebuilt at package-build time with CF model nodes removed (prevents a `dam:AssetModel` rollback that would otherwise leave the site empty after QSC).
+2. **`b2b-ue-site-1.0.0.zip`** — installs the template + expanded page content + DAM. Used for bulk content updates after the site exists. Uses:
+   - `mode="replace"` for the template path and DAM
+   - **merge** for `/content/b2b-ue` — preserves site-level properties written by Quick Site Creation
+   - **`/conf/b2b-ue` is entirely excluded** — this path is owned by Quick Site Creation. It stores the `franklin.delivery` GitHub proxy config that lets AEM Author serve `component-models.json`, `component-filters.json`, and `component-definition.json` to Universal Editor. Overwriting it causes 404s on component JSON.
 
-### Installing on AEM Author
+### Two-approach workflow
 
-**Option A — Template + Quick Site Creation (new environments or full reset):**
+**Approach 1 — Template → Quick Site Creation (recommended for new environments):**
 1. Go to CRX Package Manager (`/crx/packmgr`)
 2. Upload and install `b2b-ue-template-1.0.0.zip`
 3. Go to AEM Sites console → **Create → Site from Template**
-4. Select **B2B UE Starter** → fill in site title and path → Create
-5. This writes the `franklin.delivery` proxy config to `/conf/b2b-ue` — **required** before using Option B
+4. Select **B2B UE Starter** → fill in title → Create
+5. AEM installs the embedded `site.zip` — the site is created at `/content/b2b-ue/` with all blocks pre-configured (hero-b2b, solutions grid, etc.)
+6. This also writes the `franklin.delivery` proxy config to `/conf/b2b-ue`, which Universal Editor needs to load component models
 
-**Option B — Full install (dev iteration / pushing content updates):**
-1. Site must already exist from Option A
-2. Go to CRX Package Manager → upload and install `b2b-ue-site-1.0.0.zip`
-3. Reinstall at any time to push page content and DAM updates
+**Approach 2 — Content package (dev iteration / bulk updates / standalone install):**
+1. Go to CRX Package Manager → upload and install `b2b-ue-site-1.0.0.zip`
+2. Reinstall at any time to push page content and DAM updates
+3. **Can also create the site on a fresh instance** (skips the QSC wizard) — but Universal Editor will not have component models until `/conf/b2b-ue` exists. Run Approach 1 at least once per environment to set up the conf, then use Approach 2 for all subsequent updates.
 
-> **Recovery from broken styles / component-*.json 404:** If `/conf/b2b-ue` was accidentally overwritten, delete the site, delete `/conf/b2b-ue` via CRXDE Lite, and repeat Option A to restore the proxy configuration.
+> **Recovery from broken styles / component-*.json 404:** If `/conf/b2b-ue` was accidentally overwritten, delete `/conf/b2b-ue` via CRXDE Lite and delete the site, then repeat Approach 1 to restore the proxy configuration.
 
 ---
 
