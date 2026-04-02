@@ -91,21 +91,24 @@ This runs `build-packages.py`, which:
 1. **`b2b-ue-template-1.0.0.zip`** — mirrors `content-package/` 1:1. Installs only the site template.
 2. **`b2b-ue-site-1.0.0.zip`** — combines the template with the expanded content from `site.zip`. Uses:
    - `mode="replace"` for the template path and DAM (fixed/controlled structures)
-   - **No mode (merge)** for `/conf/b2b-ue` and `/content/b2b-ue` — this preserves site-level properties written by Quick Site Creation (such as `cq:conf` and EDS delivery configuration) and prevents partial-install failures
-   - CF model nodes (`/conf/b2b-ue/settings/dam/cfm/models/`) are **excluded** because they require the `dam:AssetModel` JCR node type, which may not be available on all AEM Cloud instances
+   - **No mode (merge)** for `/content/b2b-ue` — preserves site-level properties written by Quick Site Creation
+   - **`/conf/b2b-ue` is entirely excluded** — this path is owned by Quick Site Creation. It stores the `franklin.delivery` GitHub proxy config that lets AEM Author serve `component-models.json`, `component-filters.json`, and `component-definition.json` to Universal Editor. If this conf is overwritten or broken, those files 404 and the editor loses all component models and styles.
 
 ### Installing on AEM Author
 
-**Option A — Template + Quick Site Creation (recommended for new environments):**
+**Option A — Template + Quick Site Creation (new environments or full reset):**
 1. Go to CRX Package Manager (`/crx/packmgr`)
 2. Upload and install `b2b-ue-template-1.0.0.zip`
 3. Go to AEM Sites console → **Create → Site from Template**
 4. Select **B2B UE Starter** → fill in site title and path → Create
+5. This writes the `franklin.delivery` proxy config to `/conf/b2b-ue` — **required** before using Option B
 
-**Option B — Full install (for dev iteration / updating existing site):**
-1. Make sure the site already exists (from Option A, first time)
+**Option B — Full install (dev iteration / pushing content updates):**
+1. Site must already exist from Option A
 2. Go to CRX Package Manager → upload and install `b2b-ue-site-1.0.0.zip`
-3. Reinstall at any time to push updated content — merge mode means existing site configuration is preserved
+3. Reinstall at any time to push page content and DAM updates
+
+> **Recovery from broken styles / component-*.json 404:** If `/conf/b2b-ue` was accidentally overwritten, delete the site, delete `/conf/b2b-ue` via CRXDE Lite, and repeat Option A to restore the proxy configuration.
 
 ---
 

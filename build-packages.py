@@ -8,14 +8,11 @@ Build script — generates two AEM content packages from content-package/
       site manually via Sites → Create → Site from Template.
 
   b2b-ue-site-{VERSION}.zip
-      Full-install package. Installs both the template AND all site content
-      directly (/content/b2b-ue, /content/dam/b2b-ue, /conf/b2b-ue).
-      Uses merge mode for conf/content — safe to reinstall without wiping
-      AEM-managed configuration. DAM and template use replace mode.
-
-      CF model nodes (/conf/b2b-ue/settings/dam/cfm/models/) are excluded
-      because they require dam:AssetModel which may not be available on all
-      AEM Cloud instances. Add CF models manually via AEM Author if needed.
+      Full-install package. Installs the template + page content + DAM.
+      /conf/b2b-ue is intentionally excluded — that conf is owned by Quick
+      Site Creation and stores the franklin.delivery GitHub proxy config that
+      serves component-*.json to Universal Editor. Touching it causes 404s.
+      Use merge mode for /content/b2b-ue to preserve site-level properties.
 
 Usage:
     python3 build-packages.py           # builds both, version from VERSION below
@@ -43,10 +40,11 @@ CONTENT_PKG_DIR = "content-package"
 SITE_ZIP_REL = "jcr_root/conf/global/site-templates/b2b-ue-1.0.0/site.zip"
 
 # Paths inside site.zip to skip in the full-install package.
-# dam:AssetModel node type may not exist on all AEM Cloud instances.
+# /conf/b2b-ue is owned by Quick Site Creation (stores the franklin.delivery
+# GitHub proxy config). We never install it via the full-install package.
 SITE_ZIP_SKIP_PREFIXES = (
     "META-INF",
-    "jcr_root/conf/b2b-ue/settings/dam/cfm/models",
+    "jcr_root/conf/b2b-ue",
 )
 
 DEFAULT_VERSION = "1.0.0"
@@ -84,14 +82,19 @@ def build_fullinstall(version: str) -> str:
 
     Filter modes:
       /conf/global/site-templates  → replace  (fixed, predictable structure)
-      /conf/b2b-ue                 → merge    (preserve AEM-managed settings)
-      /content/b2b-ue              → merge    (preserve site-level properties
+      /content/b2b-ue              → merge    (preserves site-level properties
                                                set by Quick Site Creation)
       /content/dam/b2b-ue          → replace  (fully controlled asset set)
 
-    Using merge for conf/content means reinstall adds/updates nodes from the
-    package but does NOT delete nodes that exist in AEM but not in the package.
-    This is intentional — it keeps Quick Site Creation's configuration intact.
+    /conf/b2b-ue is intentionally EXCLUDED from this package.
+    That path is owned entirely by Quick Site Creation — it writes the GitHub
+    repo cloud config that powers the franklin.delivery proxy (which serves
+    component-*.json to Universal Editor). If we touch /conf/b2b-ue, we risk
+    breaking the proxy and causing 404s for component-models/filters/definition.
+
+    Workflow:
+      1. First install: use b2b-ue-template + Quick Site Creation (sets up conf)
+      2. Subsequent updates: reinstall b2b-ue-site (touches only content + DAM)
     """
     site_zip_path = os.path.join(CONTENT_PKG_DIR, SITE_ZIP_REL)
     if not os.path.exists(site_zip_path):
@@ -106,14 +109,15 @@ def build_fullinstall(version: str) -> str:
 <workspaceFilter version="1.0">
   <!-- Site template: replace is safe — fixed, predictable structure -->
   <filter root="/conf/global/site-templates/b2b-ue-1.0.0" mode="replace"/>
-  <!-- Site configuration: merge — preserves AEM-managed settings.
-       CF model nodes are excluded (see build-packages.py SITE_ZIP_SKIP_PREFIXES). -->
-  <filter root="/conf/b2b-ue"/>
   <!-- Page content: merge — preserves site-level properties (cq:conf,
-       sling:configRef etc.) that Quick Site Creation writes to the root page. -->
+       sling:configRef, franklin.delivery proxy config etc.) that Quick Site
+       Creation writes. Never use mode="replace" here. -->
   <filter root="/content/b2b-ue"/>
   <!-- DAM assets: replace — fully controlled by this package -->
   <filter root="/content/dam/b2b-ue" mode="replace"/>
+  <!-- /conf/b2b-ue is intentionally omitted: owned by Quick Site Creation.
+       Touching it breaks the franklin.delivery GitHub proxy that serves
+       component-models.json / component-filters.json to Universal Editor. -->
 </workspaceFilter>
 """
 
