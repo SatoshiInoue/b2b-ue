@@ -104,21 +104,39 @@ while (row.firstElementChild) li.append(row.firstElementChild);  // preserve chi
 ```
 
 #### Pattern B — rebuild with different semantics (complex blocks like hero)
-When new semantic elements are needed (h1, a, span), create them with DOM API,
-call `moveInstrumentation(originalCell, newElement)` to transfer the AEM-injected
-attributes, then set content via `textContent` / `innerHTML`.
+`text`, `select`, `boolean`, and `number` fields are JCR **properties** on the block
+node — AEM does **not** inject `data-aue-prop` on their rendered cells. Calling
+`moveInstrumentation` on those cells copies nothing useful.
+
+For inline canvas editing of text properties, the decorator must **explicitly** set
+`data-aue-prop`, `data-aue-type`, and `data-aue-label` on the new elements via DOM API:
 
 ```javascript
-const h1 = document.createElement('h1');
+// Helper keeps it DRY across many fields
+function ueText(el, prop, label) {
+  el.dataset.aueProp = prop;
+  el.dataset.aueType = 'text';
+  el.dataset.aueLabel = label;
+  return el;
+}
+
+const h1 = ueText(document.createElement('h1'), 'header', 'Headline');
 h1.className = 'my-headline';
-moveInstrumentation(headlineCell, h1);   // transfers data-aue-prop="header" etc.
 h1.textContent = headlineCell?.textContent?.trim() || '';
 contentDiv.append(h1);
 ```
 
-Use pseudo-elements (`::before`, `::after`) for purely decorative DOM nodes
-(overlays, dividers, accent bars) — keeps the JS lean and those elements out of
-the UE content tree. See `blocks/hero-b2b/` for a complete example.
+`moveInstrumentation` is still needed for `reference`/`richtext` fields because
+those create child JCR nodes with a dynamic `data-aue-resource` path:
+
+```javascript
+moveInstrumentation(bgImg, optimized.querySelector('img')); // reference
+moveInstrumentation(descCell, descDiv);                     // richtext
+```
+
+Use CSS `::before`/`::after` for purely decorative elements (overlays, dividers,
+accent bars) — keeps the JS lean and those nodes out of the UE content tree.
+See `blocks/hero-b2b/` for a complete example.
 
 ### Optimizing images
 
