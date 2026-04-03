@@ -31,6 +31,17 @@
           "name": "linkUrl",
           "label": "Link URL",
           "valueType": "string"
+        },
+        {
+          "component": "select",
+          "name": "variant",
+          "label": "Variant",
+          "valueType": "string",
+          "options": [
+            { "name": "Default", "value": "" },
+            { "name": "Search Icon", "value": "search" },
+            { "name": "Contact Button", "value": "contact" }
+          ]
         }
       ]
     }
