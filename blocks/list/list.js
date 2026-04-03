@@ -65,9 +65,9 @@ function resolveJcrRoot(rootPath, langCode) {
 
 /**
  * Fetches child pages from the AEM JCR on the author tier.
- * Uses the Sling GET servlet (.2.json) for the page list, then fetches each
- * article's rendered HTML in parallel to extract the og:image meta tag.
- * The HTML fetch is same-origin and uses the author's existing browser session.
+ * Uses the Sling GET servlet (.2.json) — a single request returns all child
+ * page metadata including the featuredImage property set via page properties.
+ * No per-page HTML fetches are needed.
  * @param {string} rootPath  EDS-style path, e.g. "/en/news"
  * @param {string} langCode
  * @returns {Promise<Array>}
@@ -104,36 +104,22 @@ async function fetchAuthorListPages(rootPath, langCode) {
         category = content.category || '';
       }
 
+      // featuredImage is a reference property set directly on jcr:content via the
+      // page-metadata "Article" tab in Universal Editor. Reading it here costs nothing
+      // extra — it's already in the .2.json response. No per-page HTML fetch needed.
+      const image = content.featuredImage || '';
+
       pages.push({
         path: `${rootPath}/${key}`,
-        jcrPath: `${jcrRoot}/${key}`,
         title,
         description: content['jcr:description'] || '',
-        image: '',
+        image,
         category,
         lastModified: lastModifiedRaw ? new Date(lastModifiedRaw).getTime() / 1000 : 0,
         listOrder: parseInt(content.listOrder, 10) || null,
       });
     });
 
-    // Fetch each article's rendered HTML to extract og:image (parallel, same-origin).
-    // This is the only reliable way to get the featured image on the author tier
-    // since the og:image is derived from page content, not a flat jcr:content property.
-    await Promise.all(
-      pages.map(async (page) => {
-        try {
-          const pageResp = await fetch(`${page.jcrPath}.html`);
-          if (!pageResp.ok) return;
-          const html = await pageResp.text();
-          const doc = new DOMParser().parseFromString(html, 'text/html');
-          page.image = doc.querySelector('meta[property="og:image"]')?.getAttribute('content') || '';
-        } catch {
-          // image stays empty — placeholder will render instead
-        }
-      }),
-    );
-
-    pages.forEach((p) => { delete p.jcrPath; });
     return pages;
   } catch (e) {
     // eslint-disable-next-line no-console

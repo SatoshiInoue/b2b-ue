@@ -25,15 +25,31 @@ npm run build:json
 1. Read `blocks/hero/hero.js` and `blocks/cards/cards.js` as pattern references
 2. Create `blocks/{name}/{name}.js` — `export default function decorate(block) { ... }`
 3. Create `blocks/{name}/{name}.css`
-4. Create `blocks/{name}/_{name}.json` — definitions + models + filters
-5. Add block name to `section` filter in `models/_component-filters.json`
-6. Run `npm run build:json`
+4. Create `blocks/{name}/_{name}.json` — definitions + filters only (the `models` section here is NOT used by the build)
+5. Add the block's model fields to `models/_component-models.json` — this is the only file that feeds `component-models.json`
+6. Add block name to `section` filter in `models/_component-filters.json`
+7. Run `npm run build:json`
 
 See `docs/block-development.md` for full patterns and field type reference.
 
 ### Add/edit a field in Universal Editor
 
-Edit `blocks/{name}/_{name}.json` → `models` section. For shared models (page-metadata, image, title), edit `models/_component-models.json`. Run `npm run build:json`.
+**CRITICAL — build system architecture:**
+
+`component-models.json` is generated **solely** from `models/_component-models.json`.
+The `models` arrays inside `blocks/{name}/_{name}.json` are **NOT** read by the build.
+They exist for documentation/tooling reference only and have no effect on the output.
+
+| What you want to change | Where to edit |
+|---|---|
+| A block's UE property fields | `models/_component-models.json` — find or add the model by `"id"` |
+| A block's definition/template defaults | `blocks/{name}/_{name}.json` → `definitions[].plugins.xwalk.page.template` |
+| Section/component filter (what blocks are insertable) | `models/_component-filters.json` |
+
+After any edit, run `npm run build:json`.
+
+**Common mistake:** editing `blocks/{name}/_{name}.json` → `models` and wondering why
+UE properties didn't change. Always edit `models/_component-models.json` for that.
 
 See `docs/component-models.md` for all field component types.
 
@@ -149,10 +165,40 @@ moveInstrumentation(img, pic.querySelector('img'));
 img.closest('picture').replaceWith(pic);
 ```
 
+### Author-tier data fetching — never fetch per-page HTML
+
+When a block needs to display data from child pages on the AEM author tier, always use
+a single `.2.json` Sling GET request. **Never** fire per-page `.html` fetches to parse
+meta tags — each one triggers a full server-side page render on the author, saturating
+the request queue and blocking the entire page load in Universal Editor.
+
+**Wrong — N full page renders:**
+```js
+// fetches page.html for every child just to read og:image — do NOT do this
+await Promise.all(pages.map(async (page) => {
+  const resp = await fetch(`${page.jcrPath}.html`);
+  const doc = new DOMParser().parseFromString(await resp.text(), 'text/html');
+  page.image = doc.querySelector('meta[property="og:image"]')?.getAttribute('content') || '';
+}));
+```
+
+**Correct — image as a flat JCR page property:**
+```js
+// Add a `reference` field to page-metadata in _component-models.json.
+// Authors set it once in UE page properties.
+// It's already in the .2.json response — zero extra requests.
+const image = content.featuredImage || '';
+```
+
+The rule: any data needed by a listing block must be **a flat property on `jcr:content`**
+(set via a page-metadata model field) so it's available in the `.2.json` depth-2 response.
+See `plans/list-block.md` for the full rationale and the `featuredImage` implementation.
+
 ---
 
 ## Block JSON Skeleton
 
+`blocks/{name}/_{name}.json` — definitions + filters only:
 ```json
 {
   "definitions": [{
@@ -162,16 +208,20 @@ img.closest('picture').replaceWith(pic);
       "template": { "name": "My Block", "model": "my-block" }
     }}}
   }],
-  "models": [{
-    "id": "my-block",
-    "fields": [
-      { "component": "text",      "name": "title",  "label": "Title",  "valueType": "string" },
-      { "component": "richtext",  "name": "text",   "label": "Body",   "valueType": "string" },
-      { "component": "reference", "name": "image",  "label": "Image",  "multi": false },
-      { "component": "select",    "name": "style",  "label": "Style",
-        "options": [{ "name": "Default", "value": "" }, { "name": "Dark", "value": "dark" }] }
-    ]
-  }],
   "filters": []
+}
+```
+
+`models/_component-models.json` — add the model entry here (the ONLY place it takes effect):
+```json
+{
+  "id": "my-block",
+  "fields": [
+    { "component": "text",      "name": "title",  "label": "Title",  "valueType": "string" },
+    { "component": "richtext",  "name": "text",   "label": "Body",   "valueType": "string" },
+    { "component": "reference", "name": "image",  "label": "Image",  "multi": false },
+    { "component": "select",    "name": "style",  "label": "Style",
+      "options": [{ "name": "Default", "value": "" }, { "name": "Dark", "value": "dark" }] }
+  ]
 }
 ```

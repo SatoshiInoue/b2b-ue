@@ -54,6 +54,13 @@
         "name": "tab-article"
       },
       {
+        "component": "reference",
+        "name": "featuredImage",
+        "label": "Featured Image",
+        "description": "Thumbnail shown in list cards (card, news-featured styles). Stored as a flat JCR property — no extra page fetch needed by the list block.",
+        "multi": false
+      },
+      {
         "component": "aem-tag",
         "name": "cq:tags",
         "label": "Category Tag",
