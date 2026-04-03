@@ -33,13 +33,6 @@
         {
           "component": "text",
           "valueType": "string",
-          "name": "heading",
-          "label": "Heading",
-          "description": "Column heading shown above the list (e.g. PRODUCTS). Used by footer-nav style."
-        },
-        {
-          "component": "text",
-          "valueType": "string",
           "name": "rootPath",
           "label": "Root Path",
           "description": "EDS path whose children to list, e.g. /en/news. A matching query-index must exist at {rootPath}/query-index.json."
@@ -129,6 +122,13 @@
           "name": "readMoreText",
           "label": "Read More Label",
           "description": "Text for the read-more link on news-featured cards. Leave blank to hide. E.g. 'Read more' or 'Continue reading'."
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "heading",
+          "label": "Heading",
+          "description": "Column heading shown above the list (e.g. PRODUCTS). Used by footer-nav style."
         }
       ]
     }

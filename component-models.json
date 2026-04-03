@@ -726,6 +726,10 @@
           {
             "name": "News Featured",
             "value": "news-featured"
+          },
+          {
+            "name": "Footer Nav",
+            "value": "footer-nav"
           }
         ],
         "value": "card"
@@ -736,6 +740,48 @@
         "name": "readMoreText",
         "label": "Read More Label",
         "description": "Text for the read-more link on news-featured cards. Leave blank to hide. E.g. 'Read more' or 'Continue reading'."
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "heading",
+        "label": "Heading",
+        "description": "Column heading shown above the list (e.g. PRODUCTS). Used by footer-nav style."
+      }
+    ]
+  },
+  {
+    "id": "social-icons",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "linkedinUrl",
+        "label": "LinkedIn URL"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "twitterUrl",
+        "label": "Twitter/X URL"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "youtubeUrl",
+        "label": "YouTube URL"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "instagramUrl",
+        "label": "Instagram URL"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "facebookUrl",
+        "label": "Facebook URL"
       }
     ]
   }

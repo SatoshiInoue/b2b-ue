@@ -5,30 +5,31 @@ import { isAuthorEnvironment } from '../../scripts/scripts.js';
 /**
  * Reads the block's authored field values from its DOM rows.
  * Each row maps to one model field in definition order:
- *   0: heading, 1: rootPath, 2: sortBy, 3: showDescription, 4: showImage, 5: showDate,
- *   6: limit, 7: paginate, 8: pageSize, 9: urlState, 10: listStyle, 11: readMoreText
+ *   0: rootPath, 1: sortBy, 2: showDescription, 3: showImage, 4: showDate,
+ *   5: limit, 6: paginate, 7: pageSize, 8: urlState, 9: listStyle,
+ *   10: readMoreText, 11: heading
  * @param {Element} block
- * @returns {{ heading: string, rootPath: string, sortBy: string, showDescription: boolean,
+ * @returns {{ rootPath: string, sortBy: string, showDescription: boolean,
  *   showImage: boolean, showDate: boolean, limit: number,
  *   paginate: boolean, pageSize: number, urlState: boolean, listStyle: string,
- *   readMoreText: string }}
+ *   readMoreText: string, heading: string }}
  */
 function readConfig(block) {
   const rows = [...block.children];
   const get = (i) => rows[i]?.textContent?.trim() || '';
   return {
-    heading: get(0) || '',
-    rootPath: get(1) || '/en/news',
-    sortBy: get(2) || 'alphabetical',
-    showDescription: get(3) === 'true',
-    showImage: get(4) === 'true',
-    showDate: get(5) === 'true',
-    limit: parseInt(get(6), 10) || 0,
-    paginate: get(7) === 'true',
-    pageSize: parseInt(get(8), 10) || 5,
-    urlState: get(9) === 'true',
-    listStyle: get(10) || 'card',
-    readMoreText: get(11) || '',
+    rootPath: get(0) || '/en/news',
+    sortBy: get(1) || 'alphabetical',
+    showDescription: get(2) === 'true',
+    showImage: get(3) === 'true',
+    showDate: get(4) === 'true',
+    limit: parseInt(get(5), 10) || 0,
+    paginate: get(6) === 'true',
+    pageSize: parseInt(get(7), 10) || 5,
+    urlState: get(8) === 'true',
+    listStyle: get(9) || 'card',
+    readMoreText: get(10) || '',
+    heading: get(11) || '',
   };
 }
 
