@@ -33,6 +33,13 @@
         {
           "component": "text",
           "valueType": "string",
+          "name": "heading",
+          "label": "Heading",
+          "description": "Column heading shown above the list (e.g. PRODUCTS). Used by footer-nav style."
+        },
+        {
+          "component": "text",
+          "valueType": "string",
           "name": "rootPath",
           "label": "Root Path",
           "description": "EDS path whose children to list, e.g. /en/news. A matching query-index must exist at {rootPath}/query-index.json."
@@ -111,7 +118,8 @@
             { "name": "Card", "value": "card" },
             { "name": "Small", "value": "small" },
             { "name": "Medium", "value": "medium" },
-            { "name": "News Featured", "value": "news-featured" }
+            { "name": "News Featured", "value": "news-featured" },
+            { "name": "Footer Nav", "value": "footer-nav" }
           ],
           "value": "card"
         },

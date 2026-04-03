@@ -522,3 +522,50 @@
     padding: 2px 6px;
   }
 }
+
+
+/* ============================================================
+   Footer Nav style
+   Rendered inside the footer's nav section as a column.
+   ============================================================ */
+
+.list.list-style-footer-nav {
+  padding: 0;
+  background: none;
+}
+
+.list.list-style-footer-nav .footer-nav-heading {
+  color: #e8b400;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin: 0 0 16px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #e8b400;
+  display: inline-block;
+}
+
+.list.list-style-footer-nav .footer-nav-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.list.list-style-footer-nav .footer-nav-links li {
+  margin-bottom: 10px;
+}
+
+.list.list-style-footer-nav .footer-nav-links a {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.list.list-style-footer-nav .footer-nav-links a:hover {
+  color: #fff;
+}
+
+.list.list-style-footer-nav .footer-nav-links a::after {
+  content: none !important;
+}

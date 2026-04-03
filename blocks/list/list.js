@@ -5,28 +5,30 @@ import { isAuthorEnvironment } from '../../scripts/scripts.js';
 /**
  * Reads the block's authored field values from its DOM rows.
  * Each row maps to one model field in definition order:
- *   0: rootPath, 1: sortBy, 2: showDescription, 3: showImage, 4: showDate,
- *   5: limit, 6: paginate, 7: pageSize, 8: urlState, 9: listStyle
+ *   0: heading, 1: rootPath, 2: sortBy, 3: showDescription, 4: showImage, 5: showDate,
+ *   6: limit, 7: paginate, 8: pageSize, 9: urlState, 10: listStyle, 11: readMoreText
  * @param {Element} block
- * @returns {{ rootPath: string, sortBy: string, showDescription: boolean,
+ * @returns {{ heading: string, rootPath: string, sortBy: string, showDescription: boolean,
  *   showImage: boolean, showDate: boolean, limit: number,
- *   paginate: boolean, pageSize: number, urlState: boolean, listStyle: string }}
+ *   paginate: boolean, pageSize: number, urlState: boolean, listStyle: string,
+ *   readMoreText: string }}
  */
 function readConfig(block) {
   const rows = [...block.children];
   const get = (i) => rows[i]?.textContent?.trim() || '';
   return {
-    rootPath: get(0) || '/en/news',
-    sortBy: get(1) || 'alphabetical',
-    showDescription: get(2) === 'true',
-    showImage: get(3) === 'true',
-    showDate: get(4) === 'true',
-    limit: parseInt(get(5), 10) || 0,
-    paginate: get(6) === 'true',
-    pageSize: parseInt(get(7), 10) || 5,
-    urlState: get(8) === 'true',
-    listStyle: get(9) || 'card',
-    readMoreText: get(10) || '',
+    heading: get(0) || '',
+    rootPath: get(1) || '/en/news',
+    sortBy: get(2) || 'alphabetical',
+    showDescription: get(3) === 'true',
+    showImage: get(4) === 'true',
+    showDate: get(5) === 'true',
+    limit: parseInt(get(6), 10) || 0,
+    paginate: get(7) === 'true',
+    pageSize: parseInt(get(8), 10) || 5,
+    urlState: get(9) === 'true',
+    listStyle: get(10) || 'card',
+    readMoreText: get(11) || '',
   };
 }
 
@@ -493,6 +495,42 @@ function renderPaginatedList(pages, config, block) {
 }
 
 /**
+ * Renders a footer navigation column with a gold heading and plain links.
+ * @param {string} headingText  Column heading (uppercased); falls back to rootPath last segment.
+ * @param {string} rootPath     EDS root path, used as fallback heading source.
+ * @param {Array}  pages        Array of page objects with path and title.
+ * @returns {Element}
+ */
+function renderFooterNav(headingText, rootPath, pages) {
+  const col = document.createElement('div');
+  col.className = 'footer-nav-col';
+
+  const label = headingText
+    ? headingText.toUpperCase()
+    : (rootPath.split('/').filter(Boolean).pop() || '').toUpperCase();
+
+  const heading = document.createElement('p');
+  heading.className = 'footer-nav-heading';
+  heading.textContent = label;
+  col.append(heading);
+
+  const ul = document.createElement('ul');
+  ul.className = 'footer-nav-links';
+
+  pages.forEach((page) => {
+    const li = document.createElement('li');
+    const a = document.createElement('a');
+    a.href = page.path;
+    a.textContent = page.title;
+    li.append(a);
+    ul.append(li);
+  });
+
+  col.append(ul);
+  return col;
+}
+
+/**
  * List block decorator.
  * Reads config from the block's authored rows, fetches child pages from the appropriate
  * data source (JCR on author, query index on EDS), sorts them, and renders the list.
@@ -501,7 +539,7 @@ function renderPaginatedList(pages, config, block) {
 export default async function decorate(block) {
   const config = readConfig(block);
   const {
-    rootPath, sortBy, limit, paginate, pageSize, listStyle,
+    heading, rootPath, sortBy, limit, paginate, pageSize, listStyle,
   } = config;
   const langCode = getLangFromPath(rootPath);
 
@@ -530,7 +568,9 @@ export default async function decorate(block) {
   const sorted = sortPages(pages, sortBy);
   const limited = limit > 0 ? sorted.slice(0, limit) : sorted;
 
-  if (paginate && limited.length > pageSize) {
+  if (listStyle === 'footer-nav') {
+    block.append(renderFooterNav(heading, rootPath, limited));
+  } else if (paginate && limited.length > pageSize) {
     renderPaginatedList(limited, config, block);
   } else if (listStyle === 'news-featured') {
     block.append(renderNewsFeatured(limited, config.readMoreText));
