@@ -187,14 +187,14 @@ header .nav-hamburger-icon::after {
 }
 
 header nav[aria-expanded='false'] .nav-hamburger-icon::before { top: -7px; }
-header nav[aria-expanded='false'] .nav-hamburger-icon::after  { top: 7px; width: 14px; }
+header nav[aria-expanded='false'] .nav-hamburger-icon::after  { top: 7px; width: 14px; background: #e8b400; }
 
 header nav[aria-expanded='true'] .nav-hamburger-icon { background: transparent; }
 header nav[aria-expanded='true'] .nav-hamburger-icon::before {
   top: 0; width: 22px; transform: rotate(45deg); transform-origin: center;
 }
 header nav[aria-expanded='true'] .nav-hamburger-icon::after {
-  top: 0; width: 22px; transform: rotate(-45deg); transform-origin: center;
+  top: 0; width: 22px; background: #fff; transform: rotate(-45deg); transform-origin: center;
 }
 
 /* ── Mobile drawer ──────────────────────────────────────────────────── */
