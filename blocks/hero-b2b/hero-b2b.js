@@ -18,10 +18,16 @@ export default function decorate(block) {
   const rows = [...block.querySelectorAll(':scope > div')];
   const getCell = (i) => rows[i]?.querySelector(':scope > div:last-child');
 
+  // Read variant (field 14) — apply as CSS class so CSS can target it.
+  // 'cta' variant: no background image, two-column layout, stats card on right.
+  const variant = getCell(14)?.textContent?.trim() || '';
+  if (variant) block.classList.add(variant);
+  const isCta = variant === 'cta';
+
   // ── Background image ──────────────────────────────────────────────────────
-  const bgImg = getCell(0)?.querySelector('img');
   const bgDiv = document.createElement('div');
   bgDiv.className = 'hero-b2b-bg';
+  const bgImg = getCell(0)?.querySelector('img');
   if (bgImg) {
     const optimized = createOptimizedPicture(bgImg.src, bgImg.alt || '', false, [
       { media: '(min-width: 900px)', width: '1440' },
@@ -75,14 +81,17 @@ export default function decorate(block) {
     const a = ueText(document.createElement('a'), 'cta2Text', 'CTA 2 Text');
     a.className = 'hero-b2b-cta-secondary';
     a.href = getCell(7)?.textContent?.trim() || '#';
-    a.textContent = `${cta2Text} →`;
+    // cta variant: no arrow decoration; default hero: append arrow
+    a.textContent = isCta ? cta2Text : `${cta2Text} →`;
     ctasDiv.append(a);
   }
   contentDiv.append(ctasDiv);
 
   // ── Stats ─────────────────────────────────────────────────────────────────
-  const statsDiv = document.createElement('div');
-  statsDiv.className = 'hero-b2b-stats';
+  // Default: horizontal bar below CTAs inside content.
+  // CTA variant: vertical card to the right of content.
+  const statsContainer = document.createElement('div');
+  statsContainer.className = isCta ? 'hero-b2b-stats-card' : 'hero-b2b-stats';
 
   [
     [8, 'stat1Value', 'Stat 1 Value', 9, 'stat1Label', 'Stat 1 Label'],
@@ -103,11 +112,18 @@ export default function decorate(block) {
     lblSpan.textContent = getCell(li)?.textContent?.trim() || '';
 
     statDiv.append(valSpan, lblSpan);
-    statsDiv.append(statDiv);
+    statsContainer.append(statDiv);
   });
-  contentDiv.append(statsDiv);
+
+  // Default: stats sit inside content column.
+  // CTA variant: stats card is a sibling of content, rendered on the right.
+  if (!isCta) contentDiv.append(statsContainer);
 
   // ── Assemble ──────────────────────────────────────────────────────────────
   block.textContent = '';
-  block.append(bgDiv, contentDiv);
+  if (isCta) {
+    block.append(contentDiv, statsContainer);
+  } else {
+    block.append(bgDiv, contentDiv);
+  }
 }

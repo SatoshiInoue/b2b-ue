@@ -228,6 +228,229 @@
   text-transform: uppercase;
 }
 
+/* ================================================================
+   CTA variant — dark solid background, two-column layout
+   Left: preheader + headline + description + CTAs
+   Right: stats card with vertically stacked stats
+   ================================================================ */
+
+.hero-b2b.cta {
+  background: #0d0d0d;
+  height: auto;
+  min-height: unset;
+  padding: 80px 96px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0;
+}
+
+/* No gradient overlay or gold edge bar in CTA variant */
+.hero-b2b.cta::before,
+.hero-b2b.cta::after {
+  display: none;
+}
+
+.hero-b2b.cta .hero-b2b-bg {
+  display: none;
+}
+
+/* ── CTA content column ──────────────────────────────────────── */
+.hero-b2b.cta .hero-b2b-content {
+  flex: 1;
+  max-width: 640px;
+  padding: 0;
+}
+
+/* Gold dash before preheader text */
+.hero-b2b.cta .hero-b2b-preheader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.hero-b2b.cta .hero-b2b-preheader::before {
+  content: '';
+  display: block;
+  width: 32px;
+  height: 2px;
+  background: #e8b400;
+  flex-shrink: 0;
+}
+
+.hero-b2b.cta .hero-b2b-headline {
+  font-size: 46px;
+  margin-bottom: 20px;
+}
+
+.hero-b2b.cta .hero-b2b-description {
+  margin-bottom: 36px;
+  max-width: 560px;
+}
+
+.hero-b2b.cta .hero-b2b-ctas {
+  margin-bottom: 0;
+}
+
+/* ── Stats card ──────────────────────────────────────────────── */
+.hero-b2b-stats-card {
+  display: none; /* hidden in non-cta contexts */
+}
+
+.hero-b2b.cta .hero-b2b-stats-card {
+  display: flex;
+  flex-direction: column;
+  width: 260px;
+  flex-shrink: 0;
+  margin-left: 96px;
+  background: #1a1a1a;
+  border-radius: 8px;
+  padding: 36px 32px;
+  gap: 0;
+}
+
+.hero-b2b.cta .hero-b2b-stats-card .hero-b2b-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 24px 0;
+  position: static; /* override base divider pattern */
+}
+
+.hero-b2b.cta .hero-b2b-stats-card .hero-b2b-stat:first-child {
+  padding-top: 0;
+}
+
+.hero-b2b.cta .hero-b2b-stats-card .hero-b2b-stat:last-child {
+  padding-bottom: 0;
+}
+
+.hero-b2b.cta .hero-b2b-stats-card .hero-b2b-stat + .hero-b2b-stat {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-left: 0; /* override base */
+}
+
+/* Suppress base pseudo-element divider inside stats card */
+.hero-b2b.cta .hero-b2b-stats-card .hero-b2b-stat + .hero-b2b-stat::before {
+  display: none;
+}
+
+.hero-b2b.cta .hero-b2b-stats-card .hero-b2b-stat-value {
+  font-size: 52px;
+  line-height: 1;
+}
+
+.hero-b2b.cta .hero-b2b-stats-card .hero-b2b-stat-label {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* ── CTA variant responsive ──────────────────────────────────── */
+@media (width < 1200px) {
+  .hero-b2b.cta {
+    padding: 64px 64px;
+  }
+
+  .hero-b2b.cta .hero-b2b-headline {
+    font-size: 38px;
+  }
+
+  .hero-b2b.cta .hero-b2b-stats-card {
+    margin-left: 64px;
+    width: 220px;
+  }
+
+  .hero-b2b.cta .hero-b2b-stats-card .hero-b2b-stat-value {
+    font-size: 42px;
+  }
+}
+
+@media (width < 900px) {
+  .hero-b2b.cta {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 56px 40px;
+    gap: 48px;
+  }
+
+  .hero-b2b.cta .hero-b2b-content {
+    max-width: 100%;
+  }
+
+  .hero-b2b.cta .hero-b2b-stats-card {
+    width: 100%;
+    margin-left: 0;
+    flex-direction: row;
+    padding: 28px 24px;
+    gap: 0;
+  }
+
+  .hero-b2b.cta .hero-b2b-stats-card .hero-b2b-stat {
+    flex: 1;
+    padding: 0 24px 0 0;
+  }
+
+  .hero-b2b.cta .hero-b2b-stats-card .hero-b2b-stat:last-child {
+    padding-right: 0;
+  }
+
+  .hero-b2b.cta .hero-b2b-stats-card .hero-b2b-stat + .hero-b2b-stat {
+    border-top: none;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    padding-left: 24px;
+    padding-top: 0;
+  }
+}
+
+@media (width < 600px) {
+  .hero-b2b.cta {
+    padding: 48px 20px;
+    gap: 40px;
+  }
+
+  .hero-b2b.cta .hero-b2b-headline {
+    font-size: 30px;
+  }
+
+  .hero-b2b.cta .hero-b2b-stats-card {
+    flex-direction: column;
+    padding: 0;
+    background: transparent;
+    border-radius: 0;
+    gap: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    padding-top: 32px;
+    width: 100%;
+  }
+
+  .hero-b2b.cta .hero-b2b-stats-card .hero-b2b-stat {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 12px;
+    padding: 16px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .hero-b2b.cta .hero-b2b-stats-card .hero-b2b-stat:first-child {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  .hero-b2b.cta .hero-b2b-stats-card .hero-b2b-stat + .hero-b2b-stat {
+    border-left: none;
+    padding-left: 0;
+  }
+
+  .hero-b2b.cta .hero-b2b-stats-card .hero-b2b-stat-value {
+    font-size: 32px;
+    flex-shrink: 0;
+  }
+}
+
 /* --------------------------------
    Responsive — tablet
 --------------------------------- */

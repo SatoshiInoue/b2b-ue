@@ -103,6 +103,16 @@
           "name": "stat3Label",
           "label": "Stat 3 Label",
           "valueType": "string"
+        },
+        {
+          "component": "select",
+          "name": "variant",
+          "label": "Variant",
+          "valueType": "string",
+          "options": [
+            { "name": "Default (image hero)", "value": "" },
+            { "name": "CTA (dark, two-column)", "value": "cta" }
+          ]
         }
       ]
     }
