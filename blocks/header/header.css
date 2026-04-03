@@ -29,7 +29,14 @@ header nav {
 header nav a:any-link { color: currentcolor; }
 header nav a::after,
 header nav a:hover::after,
-header nav a.button::after { content: ''; }
+header nav a.button::after {
+  content: '';
+  padding: 0;
+  float: none;
+  width: 0;
+  height: 0;
+  font-size: 0;
+}
 
 /* ── Brand ──────────────────────────────────────────────────────────── */
 header .nav-brand { flex-shrink: 0; }

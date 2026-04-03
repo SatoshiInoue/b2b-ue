@@ -92,36 +92,19 @@ function makeLogoEl(langCode) {
   a.className = 'nav-logo-link';
   a.href = `/${langCode}`;
 
-  // SVG mark (triangle with centerline)
-  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  svg.setAttribute('viewBox', '0 0 28 28');
-  svg.setAttribute('width', '28');
-  svg.setAttribute('height', '28');
-  svg.setAttribute('fill', 'none');
-  svg.setAttribute('aria-hidden', 'true');
-  svg.classList.add('nav-logo-mark');
-
-  const polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
-  polygon.setAttribute('points', '14,2 26,24 2,24');
-  polygon.setAttribute('fill', 'none');
-  polygon.setAttribute('stroke', '#e8b400');
-  polygon.setAttribute('stroke-width', '2');
-
-  const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-  line.setAttribute('x1', '14');
-  line.setAttribute('y1', '8');
-  line.setAttribute('x2', '14');
-  line.setAttribute('y2', '24');
-  line.setAttribute('stroke', '#e8b400');
-  line.setAttribute('stroke-width', '1.5');
-
-  svg.append(polygon, line);
+  const logoImg = document.createElement('img');
+  logoImg.src = '/icons/logo.svg';
+  logoImg.alt = '';
+  logoImg.width = 38;
+  logoImg.height = 38;
+  logoImg.className = 'nav-logo-mark';
+  logoImg.setAttribute('aria-hidden', 'true');
 
   const nameSpan = document.createElement('span');
   nameSpan.className = 'nav-logo-name';
   nameSpan.textContent = 'LUMINA NOVENTIS';
 
-  a.append(svg, nameSpan);
+  a.append(logoImg, nameSpan);
   return a;
 }
 
