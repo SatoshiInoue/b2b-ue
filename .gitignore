@@ -18,6 +18,10 @@ content-package/jcr_root/conf/global/site-templates/b2b-ue-1.0.0/site.zip
 
 CLAUDE.md
 
+# Claude/agent skill directories (local tooling, not project code)
+.claude/skills/copywriting
+.agents/skills/copywriting
+
 # Environment variables (local only)
 .env
 

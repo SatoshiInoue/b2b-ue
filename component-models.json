@@ -893,10 +893,12 @@
     "id": "content-fragment",
     "fields": [
       {
-        "component": "reference",
-        "name": "fragment",
-        "label": "Content Fragment",
-        "multi": false
+        "component": "aem-content-fragment",
+        "name": "reference",
+        "label": "Content Fragment Picker",
+        "valueType": "string",
+        "required": true,
+        "variationName": "contentFragmentVariation"
       },
       {
         "component": "text",

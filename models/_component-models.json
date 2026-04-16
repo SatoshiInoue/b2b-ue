@@ -386,8 +386,14 @@
           { "name": "Image Right", "value": "image-right" },
           { "name": "Image Top", "value": "image-top" },
           { "name": "Image Bottom", "value": "image-bottom" },
-          { "name": "Image-Background Text-Left", "value": "image-background-text-left" },
-          { "name": "Image-Background Text-Right", "value": "image-background-text-right" },
+          {
+            "name": "Image-Background Text-Left",
+            "value": "image-background-text-left"
+          },
+          {
+            "name": "Image-Background Text-Right",
+            "value": "image-background-text-right"
+          },
           { "name": "Fullscreen Vertical", "value": "fullscreen-vertical" }
         ]
       },
@@ -716,10 +722,12 @@
     "id": "content-fragment",
     "fields": [
       {
-        "component": "reference",
-        "name": "fragment",
-        "label": "Content Fragment",
-        "multi": false
+        "component": "aem-content-fragment",
+        "name": "reference",
+        "label": "Content Fragment Picker",
+        "valueType": "string",
+        "required": true,
+        "variationName": "contentFragmentVariation"
       },
       {
         "component": "text",

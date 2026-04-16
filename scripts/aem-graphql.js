@@ -4,10 +4,12 @@
  * All Content Fragment blocks that fetch data via GraphQL should import from
  * this single module so the publish host is configured in one place.
  *
- * Requires AEM_PUBLISH_HOST environment variable.
+ * Set AEM_PUBLISH_HOST to your publish instance URL.
+ * On author (adobeaemcloud.com) this value is ignored — the origin is used automatically.
  */
 
-const AEM_PUBLISH_HOST = process.env.AEM_PUBLISH_HOST;
+// Set your AEM Publish host here. Used only for EDS delivery (*.aem.live / *.aem.page).
+const AEM_PUBLISH_HOST = 'https://publish-p161901-e1740392.adobeaemcloud.com';
 
 /**
  * Return the AEM host to use for GraphQL requests.
