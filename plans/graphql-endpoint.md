@@ -189,3 +189,39 @@ After install:
   running the query in GraphiQL IDE after install.
 - The endpoint must be **published** (replicated) to work on the publish tier.
   Package install on author does not auto-publish. Add a note to README.
+
+---
+
+## CORS — No Manual Configuration Needed
+
+**Confirmed 2026-04-20 with AEM product team:**
+
+For XWalk (Universal Editor) sites, the franklin bundle automatically registers
+a CORS policy on the AEM Publish instance that allows `*.aem.live` and
+`*.aem.page` origins matching the site. No Dispatcher vhost config or OSGi
+CORS policy needs to be written manually.
+
+The auto-registered policy for this project:
+```json
+{
+  "alloworiginregexp": [
+    "https://([a-z0-9-]+)--b2b-ue--<github-org>\\.aem\\.(page|live)"
+  ],
+  "supportedmethods": ["GET", "HEAD", "POST"],
+  "supportedheaders": [
+    "Authorization", "Origin", "Accept", "X-Requested-With",
+    "Content-Type", "Access-Control-Request-Method",
+    "Access-Control-Request-Origin", "Access-Control-Request-Headers",
+    "Access-Control-Allow-Origin"
+  ]
+}
+```
+
+The response includes `Vary: Origin` and reflects the request origin back as
+`Access-Control-Allow-Origin` when it matches the regexp. This is why persisted
+query fetches from the EDS delivery tier work without any explicit CORS setup.
+
+**The `credentials: 'same-origin'` in `aem-graphql.js`** means the browser does
+not send cookies cross-origin. The CORS policy allows requests regardless —
+`Access-Control-Allow-Credentials: true` is returned by AEM but is not required
+by the browser since credentials are not being sent.

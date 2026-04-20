@@ -422,21 +422,22 @@ Before the block can be tested, the following must exist on AEM Author:
 
 ## CORS Considerations
 
+**Confirmed 2026-04-20 with AEM product team: no manual CORS configuration needed.**
+
 On the **author tier**, the block JS runs inside the UE iframe which is
 same-origin with the AEM author — no CORS issue.
 
-On the **EDS delivery tier** (`*.aem.live`), the browser makes a cross-origin
-fetch to the AEM publish instance. The AEM Publish Dispatcher must be
-configured to allow:
+On the **EDS delivery tier** (`*.aem.live`), the franklin bundle automatically
+registers a CORS policy on AEM Publish that allows `*.aem.live` and `*.aem.page`
+origins matching the site name. The policy reflects the request `Origin` header
+back as `Access-Control-Allow-Origin` when it matches the site's regexp pattern:
 
-- **Origin**: `https://main--b2b-ue--satoshiinoue.aem.live` (and `.aem.page`)
-- **Path**: `/graphql/execute.json/*`
-- **Method**: `GET`
-- **Headers**: `Accept`, `Content-Type`
+```
+https://([a-z0-9-]+)--b2b-ue--<github-org>\.aem\.(page|live)
+```
 
-This is a Dispatcher vhost-level config on AEM CS, not an OSGi config.
-If CORS is not configurable on this shared environment, an alternative is
-to proxy the GraphQL request through a Franklin worker or Edge function.
+No Dispatcher config, no OSGi policy, no CDN proxy needed. See
+`plans/graphql-endpoint.md` for the full policy details.
 
 ---
 

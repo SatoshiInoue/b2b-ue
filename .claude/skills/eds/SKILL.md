@@ -165,6 +165,22 @@ moveInstrumentation(img, pic.querySelector('img'));
 img.closest('picture').replaceWith(pic);
 ```
 
+### GraphQL / persisted query CORS — no manual setup needed
+
+For XWalk sites, the franklin bundle automatically registers a CORS policy on
+AEM Publish allowing `*.aem.live` and `*.aem.page` origins. Cross-origin fetches
+from the EDS delivery tier to `/graphql/execute.json/*` work out of the box —
+no Dispatcher config, OSGi policy, or CDN proxy required.
+
+The fetch in `aem-graphql.js` uses `credentials: 'same-origin'` (no cookies
+sent cross-origin). The browser only needs `Access-Control-Allow-Origin` to
+match, which AEM provides via origin reflection.
+
+**Never add CORS workarounds** (proxies, custom headers) for persisted query
+fetches — the platform handles it automatically.
+
+---
+
 ### Author-tier data fetching — never fetch per-page HTML
 
 When a block needs to display data from child pages on the AEM author tier, always use
