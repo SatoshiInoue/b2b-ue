@@ -20,7 +20,13 @@ CLAUDE.md
 
 # Claude/agent skill directories (local tooling, not project code)
 .claude/skills/copywriting
-.agents/skills/copywriting
+.claude/skills/best-practices
+.claude/skills/block-collection-and-party
+.claude/skills/block-inventory
+.claude/skills/code-review
+.claude/skills/building-blocks
+
+.agents/*
 
 # Environment variables (local only)
 .env

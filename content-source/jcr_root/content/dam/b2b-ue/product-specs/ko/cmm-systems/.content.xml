@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:dam="http://www.day.com/dam/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
+    jcr:mixinTypes="[mix:referenceable]"
+    jcr:primaryType="dam:Asset"
+    jcr:uuid="51459257-3aea-5f66-b708-a4cd7ea5c771">
+    <jcr:content
+        cq:name="cmm-systems"
+        cq:parentPath="/content/dam/b2b-ue/product-specs/ko"
+        jcr:description="\0"
+        jcr:lastModified="{Date}2026-04-23T12:00:00.000Z"
+        jcr:lastModifiedBy="admin"
+        jcr:primaryType="dam:AssetContent"
+        jcr:title="CMM Systems"
+        contentFragment="{Boolean}true">
+        <data
+            cq:model="/conf/b2b-ue/settings/dam/cfm/models/product-spec"
+            jcr:primaryType="nt:unstructured"
+            _strucVersion="{Long}2">
+            <master
+                jcr:mixinTypes="[cq:Taggable,dam:cfVariationNode]"
+                jcr:primaryType="nt:unstructured"
+                productName="CMM Systems"
+                series="SpectraLink 시리즈"
+                category="치수 계측"
+                heroImage="/content/dam/b2b-ue/images/2-people-pc-preview.jpg"
+                shortDescription="생산 라인 속도로 서브마이크론 좌표 계측. 클린룸 없이 측정 불확도 ≤ 0.05 µm 실현——생산 현장 도입 인증."
+                shortDescription_x0040_ContentType="text/plain"
+                measurementUncertainty="≤ 0.05 µm（ISO 10360-2）"
+                protectionRating="IP67"
+                operatingTemperature="−10°C〜+60°C"
+                industrialProtocols="OPC-UA · EtherNet/IP · MQTT"
+                calibrationStandard="OIML 및 ISO 소급 가능"
+                compliance="FDA 21 CFR Part 11 · EU Annex 11"
+                reportTemplates="ISO/IEC 17025 준수"/>
+        </data>
+        <indexedData jcr:primaryType="nt:unstructured">
+            <master
+                jcr:mixinTypes="[dam:IndexedFragmentData]"
+                jcr:primaryType="nt:unstructured"
+                jcr:uuid="880ef5cd-2023-52b1-be66-22a7291f1ef4"
+                _x0040_string_x0040_model="/conf/b2b-ue/settings/dam/cfm/models/product-spec"
+                _x0040_string_x0040_path="/content/dam/b2b-ue/product-specs/ko/cmm-systems"
+                _x0040_string_x0040_uuid="51459257-3aea-5f66-b708-a4cd7ea5c771"
+                _x0040_stringArray_x0040_variations="[]"
+                string_x0040_productName="CMM Systems"
+                string_x0040_series="SpectraLink 시리즈"
+                string_x0040_heroImage="/content/dam/b2b-ue/images/2-people-pc-preview.jpg"
+                string_x0040_category="치수 계측"
+                string_x0040_shortDescription="생산 라인 속도로 서브마이크론 좌표 계측. 클린룸 없이 측정 불확도 ≤ 0.05 µm 실현——생산 현장 도입 인증."
+                string_x0040_measurementUncertainty="≤ 0.05 µm（ISO 10360-2）"
+                string_x0040_protectionRating="IP67"
+                string_x0040_operatingTemperature="−10°C〜+60°C"
+                string_x0040_industrialProtocols="OPC-UA · EtherNet/IP · MQTT"
+                string_x0040_calibrationStandard="OIML 및 ISO 소급 가능"
+                string_x0040_compliance="FDA 21 CFR Part 11 · EU Annex 11"
+                string_x0040_reportTemplates="ISO/IEC 17025 준수"/>
+        </indexedData>
+        <metadata jcr:mixinTypes="[cq:Taggable]" jcr:primaryType="nt:unstructured"/>
+        <related jcr:primaryType="nt:unstructured"/>
+    </jcr:content>
+</jcr:root>

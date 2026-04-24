@@ -1,6 +1,31 @@
 {
   "version": 1,
   "skills": {
+    "best-practices": {
+      "source": "adobe/skills",
+      "sourceType": "github",
+      "computedHash": "594f9ac20f61180f20a086951e27c5a57736a211f1937414b5cb2d8f34b6caa1"
+    },
+    "block-collection-and-party": {
+      "source": "adobe/skills",
+      "sourceType": "github",
+      "computedHash": "dee62d2eb96e6ff8d039da9db59cf3be3bbacaf052edff54f8b2cfb0a4622c33"
+    },
+    "block-inventory": {
+      "source": "adobe/skills",
+      "sourceType": "github",
+      "computedHash": "2483dbcce11f141b055d9f38743252605a6a9127b03b843e93fa8b836ea19774"
+    },
+    "building-blocks": {
+      "source": "adobe/skills",
+      "sourceType": "github",
+      "computedHash": "fc19e36496ab0ad035356369fee186d8f99746e9a38b3670b808628ab712506a"
+    },
+    "code-review": {
+      "source": "adobe/skills",
+      "sourceType": "github",
+      "computedHash": "b226f3229e7903678f9c51eab1506f928e55f3ded59852cc263308a674d78f32"
+    },
     "copywriting": {
       "source": "coreyhaines31/marketingskills",
       "sourceType": "github",

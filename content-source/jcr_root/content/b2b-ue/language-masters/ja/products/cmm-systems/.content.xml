@@ -5,12 +5,11 @@
       cq:template="/libs/core/franklin/templates/page"
       jcr:primaryType="cq:PageContent"
       jcr:title="CMM Systems"
-      jcr:description="Sub-micron coordinate measurement at production speed | SpectraLink Series | Lumina Noventis"
+      jcr:description="生産ラインスピードでのサブミクロン座標計測 | SpectraLink シリーズ | Lumina Noventis"
       sling:resourceType="core/franklin/components/page/v1/page">
     <root jcr:primaryType="nt:unstructured"
           sling:resourceType="core/franklin/components/root/v1/root">
 
-      <!-- ── Section 1: Hero ──────────────────────────────────────────── -->
       <section jcr:primaryType="nt:unstructured"
                sling:resourceType="core/franklin/components/section/v1/section">
         <hero_b2b jcr:primaryType="nt:unstructured"
@@ -18,42 +17,40 @@
               name="Hero B2B"
               model="hero-b2b"
               image="/content/dam/b2b-ue/images/2-people-pc-preview.jpg"
-              preheader="Dimensional Metrology · SpectraLink Series"
-              header="Sub-micron accuracy. Factory-floor ready."
-              description="&lt;p&gt;CMM Systems that measure to ≤ 0.05 µm uncertainty — certified for production environments from −10°C to +60°C. No cleanroom required.&lt;/p&gt;"
-              cta1Text="Request a Demo"
-              cta1Link="/en/contact"
-              cta2Text="Download Datasheet"
-              cta2Link="/en/products/cmm-systems/datasheet"
+              preheader="寸法計測 · SpectraLink シリーズ"
+              header="サブミクロン精度。工場フロア対応。"
+              description="&lt;p&gt;測定不確かさ ≤ 0.05 µm の CMM Systems — −10°C〜+60°C の生産環境に対応。クリーンルームは不要です。&lt;/p&gt;"
+              cta1Text="デモをリクエスト"
+              cta1Link="/ja/contact"
+              cta2Text="データシートをダウンロード"
+              cta2Link="/ja/products/cmm-systems/datasheet"
               stat1Value="≤ 0.05 µm"
-              stat1Label="Measurement Uncertainty"
+              stat1Label="測定不確かさ"
               stat2Value="IP67"
-              stat2Label="Factory-Floor Rated"
+              stat2Label="工場フロア対応"
               stat3Value="ISO 10360-2"
-              stat3Label="Certified Accuracy"/>
+              stat3Label="精度認証"/>
       </section>
 
-      <!-- ── Section 2: Intro ─────────────────────────────────────────── -->
       <section_intro jcr:primaryType="nt:unstructured"
                sling:resourceType="core/franklin/components/section/v1/section">
         <section_header jcr:primaryType="nt:unstructured"
                sling:resourceType="core/franklin/components/block/v1/block"
                name="Section Header"
                model="section-header"
-               eyebrow="The SpectraLink CMM System"
-               heading="Coordinate measurement built for where parts are actually made"
-               subtitle="&lt;p&gt;Most CMMs live in climate-controlled measurement labs — away from your production floor, adding transport time and bottlenecks to every quality check. SpectraLink eliminates that gap. It measures directly in the production environment, delivering lab-grade results at line speed.&lt;/p&gt;"/>
+               eyebrow="SpectraLink CMM システム"
+               heading="部品が実際に製造される場所のための座標計測"
+               subtitle="&lt;p&gt;従来の CMM は温度管理された測定室に設置されています——工場フロアから切り離されているため、すべての品質チェックに輸送時間とボトルネックが生じます。SpectraLink はそのギャップを解消します。生産環境で直接計測を行い、ラインスピードでラボグレードの結果を提供します。&lt;/p&gt;"/>
       </section_intro>
 
-      <!-- ── Section 3: Feature benefit cards ─────────────────────────── -->
       <section_benefits jcr:primaryType="nt:unstructured"
                sling:resourceType="core/franklin/components/section/v1/section">
         <section_header jcr:primaryType="nt:unstructured"
                sling:resourceType="core/franklin/components/block/v1/block"
                name="Section Header"
                model="section-header"
-               eyebrow="Why Engineers Choose SpectraLink"
-               heading="Precision that keeps up with production"/>
+               eyebrow="SpectraLink が選ばれる理由"
+               heading="生産ペースに追いつく精度"/>
         <cards jcr:primaryType="nt:unstructured"
                sling:resourceType="core/franklin/components/block/v1/block"
                name="Cards"
@@ -64,25 +61,24 @@
                  model="card"
                  cardstyle="feature-tile"
                  icon="crosshair"
-                 text="&lt;h3&gt;Measure at line speed&lt;/h3&gt;&lt;p&gt;Traditional CMMs create inspection bottlenecks. SpectraLink delivers sub-micron results in seconds — fast enough to keep pace with your production cycle, not slow it down.&lt;/p&gt;"/>
+                 text="&lt;h3&gt;ラインスピードでの計測&lt;/h3&gt;&lt;p&gt;従来の CMM は検査のボトルネックを生み出します。SpectraLink は数秒でサブミクロンの計測結果を提供——生産サイクルを遅らせるのではなく、そのペースに追いつきます。&lt;/p&gt;"/>
           <item2 jcr:primaryType="nt:unstructured"
                  sling:resourceType="core/franklin/components/block/v1/block/item"
                  name="Card"
                  model="card"
                  cardstyle="feature-tile"
                  icon="check-shield"
-                 text="&lt;h3&gt;No cleanroom. No compromise.&lt;/h3&gt;&lt;p&gt;IP67 sealing and a −10°C to +60°C operating range mean SpectraLink works on the factory floor, not just in the lab. Measure where your parts are — not where it's convenient.&lt;/p&gt;"/>
+                 text="&lt;h3&gt;クリーンルーム不要。精度も妥協なし。&lt;/h3&gt;&lt;p&gt;IP67 シーリングと −10°C〜+60°C の動作温度範囲により、SpectraLink は工場フロアで稼働します。部品がある場所で計測できます——都合のいい場所ではなく。&lt;/p&gt;"/>
           <item3 jcr:primaryType="nt:unstructured"
                  sling:resourceType="core/franklin/components/block/v1/block/item"
                  name="Card"
                  model="card"
                  cardstyle="feature-tile"
                  icon="globe"
-                 text="&lt;h3&gt;Native IIoT connectivity&lt;/h3&gt;&lt;p&gt;OPC-UA, EtherNet/IP, and MQTT built in — not bolted on. SpectraLink connects directly to your MES, ERP, and SPC systems, feeding real-time quality data to the systems that act on it.&lt;/p&gt;"/>
+                 text="&lt;h3&gt;ネイティブ IIoT 接続&lt;/h3&gt;&lt;p&gt;OPC-UA、EtherNet/IP、MQTT を標準搭載——後付けではありません。SpectraLink は MES、ERP、SPC システムに直接接続し、リアルタイムの品質データをアクションにつなげます。&lt;/p&gt;"/>
         </cards>
       </section_benefits>
 
-      <!-- ── Section 4: Technical specs (feature-split with CF block) ── -->
       <section_specs jcr:primaryType="nt:unstructured"
                sling:resourceType="core/franklin/components/section/v1/section"
                style="feature-split">
@@ -91,29 +87,28 @@
                name="Section Header"
                model="section-header"
                style="dark-left"
-               eyebrow="Technical Specifications"
-               heading="Built to the standard your tolerance requires"
-               subtitle="&lt;p&gt;Every SpectraLink unit ships with a traceable calibration certificate. Measurement uncertainty is guaranteed to specification — not estimated.&lt;/p&gt;"
-               ctaText="Download Full Datasheet"
-               ctaLink="/en/products/cmm-systems/datasheet"/>
+               eyebrow="技術仕様"
+               heading="お客様の公差要件を満たす規格に準拠"
+               subtitle="&lt;p&gt;すべての SpectraLink ユニットはトレーサブルな校正証明書とともに出荷されます。測定不確かさは仕様どおりに保証されています——推定値ではありません。&lt;/p&gt;"
+               ctaText="詳細データシートをダウンロード"
+               ctaLink="/ja/products/cmm-systems/datasheet"/>
         <content_fragment jcr:primaryType="nt:unstructured"
                sling:resourceType="core/franklin/components/block/v1/block"
                name="Content Fragment"
                model="content-fragment"
-               reference="/content/dam/b2b-ue/product-specs/en/cmm-systems"
+               reference="/content/dam/b2b-ue/product-specs/ja/cmm-systems"
                query="b2b-ue/product-spec-by-path"
                variableName="path"/>
       </section_specs>
 
-      <!-- ── Section 5: Application cards ─────────────────────────────── -->
       <section_applications jcr:primaryType="nt:unstructured"
                sling:resourceType="core/franklin/components/section/v1/section">
         <section_header jcr:primaryType="nt:unstructured"
                sling:resourceType="core/franklin/components/block/v1/block"
                name="Section Header"
                model="section-header"
-               eyebrow="Applications"
-               heading="Built for where precision matters most"/>
+               eyebrow="適用分野"
+               heading="精度が最も求められる場所のために"/>
         <cards jcr:primaryType="nt:unstructured"
                sling:resourceType="core/franklin/components/block/v1/block"
                name="Cards"
@@ -124,31 +119,30 @@
                  model="card"
                  cardstyle="solution-tile"
                  icon="crosshair"
-                 text="&lt;h3&gt;Aerospace&lt;/h3&gt;&lt;p&gt;Turbine blade inspection, structural component tolerancing, and in-process airframe assembly verification — all at production rate.&lt;/p&gt;"
+                 text="&lt;h3&gt;航空宇宙&lt;/h3&gt;&lt;p&gt;タービンブレード検査、構造部品の公差管理、機体組み立て中のインプロセス検証——すべて生産レートで対応。&lt;/p&gt;"
                  ctastyle="link"
-                 link="/en/solutions/aerospace"/>
+                 link="/ja/solutions/aerospace"/>
           <item2 jcr:primaryType="nt:unstructured"
                  sling:resourceType="core/franklin/components/block/v1/block/item"
                  name="Card"
                  model="card"
                  cardstyle="solution-tile"
                  icon="monitor"
-                 text="&lt;h3&gt;Medical Devices&lt;/h3&gt;&lt;p&gt;FDA 21 CFR Part 11 compliant measurement for implants, surgical instruments, and diagnostic equipment — with audit-ready reporting built in.&lt;/p&gt;"
+                 text="&lt;h3&gt;医療機器&lt;/h3&gt;&lt;p&gt;インプラント、外科器具、診断機器向けの FDA 21 CFR Part 11 準拠計測——監査対応レポートを標準搭載。&lt;/p&gt;"
                  ctastyle="link"
-                 link="/en/solutions/medical"/>
+                 link="/ja/solutions/medical"/>
           <item3 jcr:primaryType="nt:unstructured"
                  sling:resourceType="core/franklin/components/block/v1/block/item"
                  name="Card"
                  model="card"
                  cardstyle="solution-tile"
                  icon="hex-tolerance"
-                 text="&lt;h3&gt;Automotive&lt;/h3&gt;&lt;p&gt;In-line CMM for powertrain component inspection, body panel tolerancing, and EV battery enclosure verification — integrated with your MES.&lt;/p&gt;"
+                 text="&lt;h3&gt;自動車&lt;/h3&gt;&lt;p&gt;パワートレイン部品検査、ボディパネルの公差管理、EV バッテリーエンクロージャー検証向けインライン CMM——MES との統合対応。&lt;/p&gt;"
                  ctastyle="link"
-                 link="/en/solutions/automotive"/>
+                 link="/ja/solutions/automotive"/>
         </cards>
       </section_applications>
 
-      <!-- ── Section 6: CTA banner (centered hero variant) ────────────── -->
       <section_cta jcr:primaryType="nt:unstructured"
                sling:resourceType="core/franklin/components/section/v1/section">
         <hero_b2b jcr:primaryType="nt:unstructured"
@@ -156,13 +150,13 @@
               name="Hero B2B"
               model="hero-b2b"
               variant="centered"
-              preheader="Get Started"
-              header="Every deployment starts with a measurement audit"
-              description="&lt;p&gt;Our metrology engineers will map your tolerance requirements to the right SpectraLink configuration — and identify where in-line measurement will eliminate the most bottlenecks.&lt;/p&gt;"
-              cta1Text="Schedule a Call"
-              cta1Link="/en/contact"
-              cta2Text="Download Datasheet"
-              cta2Link="/en/products/cmm-systems/datasheet"/>
+              preheader="はじめに"
+              header="すべての導入は計測監査から始まります"
+              description="&lt;p&gt;当社の計測エンジニアが、お客様の公差要件に最適な SpectraLink 構成をご提案します——そして、インライン計測がボトルネックを最も解消できる箇所を特定します。&lt;/p&gt;"
+              cta1Text="お打ち合わせのスケジュールを設定"
+              cta1Link="/ja/contact"
+              cta2Text="データシートをダウンロード"
+              cta2Link="/ja/products/cmm-systems/datasheet"/>
       </section_cta>
 
     </root>

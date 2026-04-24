@@ -5,7 +5,7 @@
     jcr:uuid="51459257-3aea-5f66-b708-a4cd7ea5c76e">
     <jcr:content
         cq:name="cmm-systems"
-        cq:parentPath="/content/dam/b2b-ue/product-specs"
+        cq:parentPath="/content/dam/b2b-ue/product-specs/en"
         jcr:description="\0"
         jcr:lastModified="{Date}2026-04-10T12:00:00.000Z"
         jcr:lastModifiedBy="admin"
@@ -68,7 +68,7 @@
                 jcr:primaryType="nt:unstructured"
                 jcr:uuid="880ef5cd-2023-52b1-be66-22a7291f1ef1"
                 _x0040_string_x0040_model="/conf/b2b-ue/settings/dam/cfm/models/product-spec"
-                _x0040_string_x0040_path="/content/dam/b2b-ue/product-specs/cmm-systems"
+                _x0040_string_x0040_path="/content/dam/b2b-ue/product-specs/en/cmm-systems"
                 _x0040_string_x0040_uuid="51459257-3aea-5f66-b708-a4cd7ea5c76e"
                 _x0040_stringArray_x0040_variations="[]"
                 string_x0040_productName="CMM Systems"

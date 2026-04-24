@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:dam="http://www.day.com/dam/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
+    jcr:mixinTypes="[mix:referenceable]"
+    jcr:primaryType="dam:Asset"
+    jcr:uuid="51459257-3aea-5f66-b708-a4cd7ea5c770">
+    <jcr:content
+        cq:name="cmm-systems"
+        cq:parentPath="/content/dam/b2b-ue/product-specs/zh"
+        jcr:description="\0"
+        jcr:lastModified="{Date}2026-04-23T12:00:00.000Z"
+        jcr:lastModifiedBy="admin"
+        jcr:primaryType="dam:AssetContent"
+        jcr:title="CMM Systems"
+        contentFragment="{Boolean}true">
+        <data
+            cq:model="/conf/b2b-ue/settings/dam/cfm/models/product-spec"
+            jcr:primaryType="nt:unstructured"
+            _strucVersion="{Long}2">
+            <master
+                jcr:mixinTypes="[cq:Taggable,dam:cfVariationNode]"
+                jcr:primaryType="nt:unstructured"
+                productName="CMM Systems"
+                series="SpectraLink 系列"
+                category="尺寸测量"
+                heroImage="/content/dam/b2b-ue/images/2-people-pc-preview.jpg"
+                shortDescription="以生产线速度实现亚微米坐标测量。无需洁净室即可实现测量不确定度 ≤ 0.05 µm——通过工厂车间部署认证。"
+                shortDescription_x0040_ContentType="text/plain"
+                measurementUncertainty="≤ 0.05 µm（ISO 10360-2）"
+                protectionRating="IP67"
+                operatingTemperature="−10°C〜+60°C"
+                industrialProtocols="OPC-UA · EtherNet/IP · MQTT"
+                calibrationStandard="OIML 和 ISO 可溯源"
+                compliance="FDA 21 CFR Part 11 · EU Annex 11"
+                reportTemplates="符合 ISO/IEC 17025"/>
+        </data>
+        <indexedData jcr:primaryType="nt:unstructured">
+            <master
+                jcr:mixinTypes="[dam:IndexedFragmentData]"
+                jcr:primaryType="nt:unstructured"
+                jcr:uuid="880ef5cd-2023-52b1-be66-22a7291f1ef3"
+                _x0040_string_x0040_model="/conf/b2b-ue/settings/dam/cfm/models/product-spec"
+                _x0040_string_x0040_path="/content/dam/b2b-ue/product-specs/zh/cmm-systems"
+                _x0040_string_x0040_uuid="51459257-3aea-5f66-b708-a4cd7ea5c770"
+                _x0040_stringArray_x0040_variations="[]"
+                string_x0040_productName="CMM Systems"
+                string_x0040_series="SpectraLink 系列"
+                string_x0040_heroImage="/content/dam/b2b-ue/images/2-people-pc-preview.jpg"
+                string_x0040_category="尺寸测量"
+                string_x0040_shortDescription="以生产线速度实现亚微米坐标测量。无需洁净室即可实现测量不确定度 ≤ 0.05 µm——通过工厂车间部署认证。"
+                string_x0040_measurementUncertainty="≤ 0.05 µm（ISO 10360-2）"
+                string_x0040_protectionRating="IP67"
+                string_x0040_operatingTemperature="−10°C〜+60°C"
+                string_x0040_industrialProtocols="OPC-UA · EtherNet/IP · MQTT"
+                string_x0040_calibrationStandard="OIML 和 ISO 可溯源"
+                string_x0040_compliance="FDA 21 CFR Part 11 · EU Annex 11"
+                string_x0040_reportTemplates="符合 ISO/IEC 17025"/>
+        </indexedData>
+        <metadata jcr:mixinTypes="[cq:Taggable]" jcr:primaryType="nt:unstructured"/>
+        <related jcr:primaryType="nt:unstructured"/>
+    </jcr:content>
+</jcr:root>
